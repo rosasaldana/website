@@ -1,0 +1,14 @@
+Task 1:
+User log in (number 5 on pivot tracker) - persist the data to a database
+
+Task 2:
+UI for how the user's profile should look like once they log in - not too important but it's better to get ideas going now then later.
+** Draw a template on the layout then start coding it
+
+James and I (full-stack) will contribute to both tasks.
+Task 1: Douglas, Daniel
+Task 2: Nick
+
+Important Reminders: choose good abstractions when coding your task. Also no spaghetti code please
+
+DOCUMENT EVERYTHING :)
