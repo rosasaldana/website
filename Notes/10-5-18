@@ -1,14 +1,40 @@
 Task 1:
-User log in (number 5 on pivot tracker) - persist the data to a database
 
+User log in (number 5 on pivot tracker) - persist the data to a database
+-----------------------------------------------------------------------------------------------------------------------------------------
 Task 2:
+
 UI for how the user's profile should look like once they log in - not too important but it's better to get ideas going now then later.
-** Draw a template on the layout then start coding it
+* Draw a template off the layout on paper then start coding. We just need a rough skeleton code outline so that we can see the 
+interactins between front end and back end.
+
+One of the things to include: 
+The user has to be able to see an icon of their friends profile picture (or maybe initials?)
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Important Reminders: 
+
+1. choose good abstractions when coding your task. Also no spaghetti code please
+2. Either fork (preferred) or create a new branch and once you commit your code we will all review it on Tuesday in class (maybe we should
+shift meeting to Wednesday?)
+DOCUMENT EVERYTHING :)
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Task for Everyone:
+
+I need everyone to write a couple sentences (paragraph max is fine) about what we want in the user profile because this will help us 
+know what back-end functionality we need to implement later on.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Roles
 
 James and I (full-stack) will contribute to both tasks.
 Task 1: Douglas, Daniel
 Task 2: Nick
 
-Important Reminders: choose good abstractions when coding your task. Also no spaghetti code please
-
-DOCUMENT EVERYTHING :)
+Goal by Wednesday
+-----------------------------------------------------------------------------------------------------------------------------------------
+Have the back-end and front-end connected. The user should be able to log in. It should be persisted to database. The user should be able
+to see their profile as well as any buttons or widgets we want to include in the front-end so that we can take the next steps in
+adding more functionality. The UI does not have to be neatly organized nor do the icons have to be extravagant.
