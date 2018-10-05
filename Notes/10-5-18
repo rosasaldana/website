@@ -1,6 +1,7 @@
 Task 1:
 
 User log in (number 5 on pivot tracker) - persist the data to a database
+Link: https://www.youtube.com/watch?v=pzGQMwGmCnc
 -----------------------------------------------------------------------------------------------------------------------------------------
 Task 2:
 
@@ -33,8 +34,10 @@ James and I (full-stack) will contribute to both tasks.
 Task 1: Douglas, Daniel
 Task 2: Nick
 
-Goal by Wednesday
+Goal by Wednesday/Thursday
 -----------------------------------------------------------------------------------------------------------------------------------------
 Have the back-end and front-end connected. The user should be able to log in. It should be persisted to database. The user should be able
 to see their profile as well as any buttons or widgets we want to include in the front-end so that we can take the next steps in
 adding more functionality. The UI does not have to be neatly organized nor do the icons have to be extravagant.
+
+On Wednesday/Thursday we will have reviewed everyones code as well as the current version of these implementations on github.
