@@ -1,0 +1,32 @@
+{
+  "name": "pixmap",
+  "version": "1.0.0",
+  "description": "pixmap application using mean stack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheGreatFive/website.git"
+  },
+  "keywords": [
+    "MEAN",
+    "stack"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheGreatFive/website/issues"
+  },
+  "homepage": "https://github.com/TheGreatFive/website#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "mongoose": "^5.3.1",
+    "morgan": "^1.9.1"
+  }
+}
