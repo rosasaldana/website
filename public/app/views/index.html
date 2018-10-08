@@ -25,14 +25,16 @@
     <script src="app/routes.js"></script>
 
     <!-- Angular Controllers -->
+    <script src="app/controllers/mainController.js"></script>
     <script src="app/controllers/userController.js"></script>
 
     <!-- Angular Services  -->
     <script src="app/services/userServices.js"></script>
+    <script src="app/services/authServices.js"></script>
 
   </head>
 
-  <body ng-app="PixMapApp">
+  <body ng-app="PixMapApp" ng-controller="mainCtrl as main">
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="/">PixMap</a>
@@ -54,12 +56,8 @@
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Log In/Sign Up</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Log In</a>
-              <a class="dropdown-item" href="#">Sign Up</a>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link" href="login">Login</a>
           </li>
         </ul>
       </div>
