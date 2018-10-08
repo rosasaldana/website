@@ -1,0 +1,33 @@
+******************************************EVERYONE***************************************************
+Douglas finished the log in portion of the website; I just merged his code onto the master branch.
+Please take a look at it and fork the repository. 
+
+GOAL FOR EVERYONE BY WEDNESDAY:
+- Get the website running
+
+IMPORTANT:
+The credentials need to be put within server.js. Check the Quick Links and go into the Google docs to 
+see the file. [This has not been uploaded yet]
+
+-------------------------------------------------------------------------------------------------------
+
+Individual Meeting Notes
+
+[MEETINGS LEFT: DANIEL AND NICK]
+             
+Douglas:  Next task includes keeping the user logged in
+
+James: Drawing the layout of the user profile [COMPLETE BY TODAY]
+
+Nick: Contribute to the layout James is drawing; code the layout
+
+Daniel: Work on the UI for the log in screen
+
+Rosa: Work on the UI for the log in screen
+
+-------------------------------------------------------------------------------------------------------
+TUESDAY [IN CLASS]
+
+1. Finalizing the user profile screen
+2. Start coding the user profile [ Do you guys want to work on this together or we could just have Daniel, Nick, James collaborate ]
+          
