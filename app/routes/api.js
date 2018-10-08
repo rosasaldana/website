@@ -1,6 +1,7 @@
 var User = require('../models/user');
 module.exports = function(router) {
 
+  //User registration route
   //Handles the route for http://<url>/api/users
   router.post('/users', function(req, res){
     var user = new User();
@@ -21,6 +22,24 @@ module.exports = function(router) {
         }
       });
     }
+  });
+
+  //User Login Routes
+  //http://<url>/api/authenticate
+  router.post('/authenticate', function(req, res){
+    User.findOne({username: req.body.username}).select('email username password').exec(function(err, user){
+      if(err) throw err;
+
+      if(!user){
+        res.send({success: false, message: "Could not authenticate user"});
+      }
+      else if(req.body.password != null && !user.comparePassword(req.body.password)){
+        res.send({ success: false, message: "Could not authenticate password" });
+      }
+      else{
+        res.send({ success: true, message: "User authenticated" });
+      }
+    });
   });
 
   return router;

@@ -18,4 +18,10 @@ UserSchema.pre('save', function(next){
   });
 });
 
+//Function to authenticate password from user
+//Input is password from user and output is a boolean
+UserSchema.methods.comparePassword = function(password){
+  return bcrypt.compareSync(password, this.password);
+}
+
 module.exports = mongoose.model('User', UserSchema);
