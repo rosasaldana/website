@@ -1,7 +1,26 @@
 angular.module('mainController', ['authServices'])
 
-.controller('mainCtrl', function(Auth, $timeout, $location){
+.controller('mainCtrl', function(Auth, $timeout, $location, $rootScope){
   var app = this;
+  app.loadingData = true;
+
+  //On every route change checking if the user is logged in
+  $rootScope.$on('$routeChangeStart', function(){
+    if(Auth.isLoggedIn()){
+      Auth.getUser().then(function(data){
+        app.isLoggedIn = true;
+        app.username = data.data.username;
+        app.email = data.data.email;
+      });
+    }
+    else{
+      app.isLoggedIn = false;
+      app.username = '';
+      app.email = '';
+    }
+    app.loadingData = false;
+  });
+
 
   app.logIn = function(loginData){
     app.successMsg = app.errorMsg = false;
@@ -15,6 +34,7 @@ angular.module('mainController', ['authServices'])
         //Redirecting to home page with two second delay
         $timeout(function(){
           $location.path('/about');
+          app.successMsg = app.loginData = '';
         }, 2000);
       }
       else{
@@ -22,4 +42,13 @@ angular.module('mainController', ['authServices'])
       }
     });
   };
+
+  app.logout = function(){
+    Auth.logout();
+    $location.path('/logout');
+    $timeout(function(){
+      $location.path('/home')
+    }, 2000);
+  };
+
 });

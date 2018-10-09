@@ -34,7 +34,7 @@
 
   </head>
 
-  <body ng-app="PixMapApp" ng-controller="mainCtrl as main">
+  <body ng-app="PixMapApp" ng-controller="mainCtrl as main" ng-show="!main.loadingData" ng-cloak>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="/">PixMap</a>
@@ -57,7 +57,13 @@
             <a class="nav-link" href="/register">Register</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="login">Login</a>
+            <a class="nav-link" href="/login" ng-show="!main.isLoggedIn">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout" ng-click="main.logout()" ng-show="main.isLoggedIn">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile" ng-show="main.isLoggedIn">{{main.username}}</a>
           </li>
         </ul>
       </div>
