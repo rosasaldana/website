@@ -35,37 +35,46 @@
   </head>
 
   <body ng-app="PixMapApp" ng-controller="mainCtrl as main">
+	<!-- NAGIVATION BAR indent this back -->
+	    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+	      <a class="navbar-brand" href="/">PixMap</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="navbar-toggler-icon"></span>
+	      </button>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="/">PixMap</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+	      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+	        <ul class="navbar-nav mr-auto">
+	          <li class="nav-item active">
+	            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="/register">Register</a>
+	          </li>
+	          <li class="nav-item">
+	            <a class="nav-link" href="login">Login</a>
+	          </li>
+	        </ul>
+	      </div>
+	    </nav>
+   		<!-- end of navgation bar-->
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href='/contact'>Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="login">Login</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <!-- contents of the website -->
+    <div id="container">
+	    <main role="main" class="container">
+	    		<div ng-view></div>
+	    		<!-- logo later shrink and center it -->
+	    		<div class="logo">
+	    			<img src="assets/images/PixMap Logo.png">
+	    		</div>
+	    </main>
+	</div>
 
-    <main role="main" class="container">
-      <div ng-view></div>
-    </main>
+	<!-- footer for the about and contact links-->
+    <footer id="footer">
+		<a class="nav-link" href="/about" font="white">About</a>
+	    <a class="nav-link" href='/contact' font="white">Contact</a>
+    </footer>
 
   </body>
+
 </html>
