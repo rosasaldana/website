@@ -1,4 +1,7 @@
 var User = require('../models/user');
+var jwt = require('jsonwebtoken');    //Used to keep the user logged in with cookies
+var secret = "GreatFiveTokenGenerator";
+
 module.exports = function(router) {
 
   //User registration route
@@ -37,9 +40,37 @@ module.exports = function(router) {
         res.send({ success: false, message: "Could not authenticate password" });
       }
       else{
-        res.send({ success: true, message: "User authenticated" });
+        var token = jwt.sign({ username: user.username, email: user.email }, secret, {expiresIn: '2 days'});
+        res.send({ success: true, message: "User authenticated", token: token });
       }
     });
+  });
+
+  //Middleware for the functions below
+  //This checks the status of the token
+  router.use(function(req, res, next){
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+
+    if(token){
+      jwt.verify(token, secret, function(err, decoded){
+        if(err){
+          res.json({success: false, message: 'Token invalid'});
+        }
+        else{
+          req.decoded = decoded;
+          next();
+        }
+      });
+    }
+    else{
+      res.json({ success: false, message: "No token provided" });
+    }
+  });
+
+  //Verifying token route
+  //http://<url>/api/currentUser
+  router.post('/currentUser', function(req, res){
+    res.send(req.decoded);
   });
 
   return router;

@@ -1,13 +1,12 @@
-
 <!doctype html>
 <html lang="en">
 
-  <head>
+<head>
     <base href='/'>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Webpage Template</title>
+    <title>PixMapApp</title>
 
     <!-- CSS CDNs from bootstrap website and personal css file -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -32,49 +31,56 @@
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
 
-  </head>
+</head>
 
-  <body ng-app="PixMapApp" ng-controller="mainCtrl as main">
-	<!-- NAGIVATION BAR indent this back -->
-	    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-	      <a class="navbar-brand" href="/">PixMap</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="navbar-toggler-icon"></span>
-	      </button>
+<body ng-app="PixMapApp" ng-controller="mainCtrl as main" ng-show="!main.loadingData" ng-cloak>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="/">PixMap</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-	      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-	        <ul class="navbar-nav mr-auto">
-	          <li class="nav-item active">
-	            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="/register">Register</a>
-	          </li>
-	          <li class="nav-item">
-	            <a class="nav-link" href="login">Login</a>
-	          </li>
-	        </ul>
-	      </div>
-	    </nav>
-   		<!-- end of navgation bar-->
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login" ng-show="!main.isLoggedIn">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout" ng-click="main.logout()" ng-show="main.isLoggedIn">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile" ng-show="main.isLoggedIn">{{main.username}}</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- end of navgation bar-->
 
     <!-- contents of the website -->
     <div id="container">
-	    <main role="main" class="container">
-	    		<div ng-view></div>
-	    		<!-- logo later shrink and center it -->
-	    		<div class="logo">
-	    			<img src="assets/images/PixMap Logo.png">
-	    		</div>
-	    </main>
-	</div>
+        <main role="main" class="container">
+            <div ng-view></div>
+            <!-- logo later shrink and center it -->
+            <div class="logo">
+                <img src="assets/images/PixMap Logo.png">
+            </div>
+        </main>
+    </div>
 
-	<!-- footer for the about and contact links-->
-    <footer id="footer">
-		<a class="nav-link" href="/about" font="white">About</a>
-	    <a class="nav-link" href='/contact' font="white">Contact</a>
+    <!-- footer for the about and contact links-->
+    <footer class="footer">
+        <div class="container">
+            <a class="nav-link" href="/about" font="white">About</a>
+            <a class="nav-link" href='/contact' font="white">Contact</a>
+        </div>
     </footer>
 
-  </body>
+</body>
 
 </html>

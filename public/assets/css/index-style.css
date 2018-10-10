@@ -19,9 +19,6 @@ body, html {
 
 footer {
 	background-color: #000;
-	position: relative;
-	height: 100px;
-	margin-top: -100px;
 	clear: both;
 }
 
@@ -43,7 +40,6 @@ a.hover {
 }
 
 .logo {
-	position: absolute;
 	top: 20%;
 	left: 40%;
 	transform: translate(-50%. -50%);
