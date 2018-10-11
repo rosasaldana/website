@@ -26,6 +26,7 @@ angular.module('authServices', [])
       }
   };
 
+  //Auth.getUser() -> function call
   authFactory.getUser = function(){
     if(AuthToken.getToken()){
       return $http.post('/api/currentUser');
@@ -66,7 +67,7 @@ angular.module('authServices', [])
     var token = AuthToken.getToken();
 
     if(token) config.headers['x-access-token'] = token;
-    
+
     return config;
   };
 

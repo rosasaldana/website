@@ -7,6 +7,7 @@ angular.module('userController', ['userServices'])
     app.successMsg = app.errorMsg = false;
     app.loading = true;
 
+    //registerController.create(regData) -> function call
     User.create(app.regData).then(function(data){
       app.loading = false;
       if(data.data.success){

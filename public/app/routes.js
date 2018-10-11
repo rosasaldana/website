@@ -6,6 +6,9 @@ var app = angular.module('appRoutes', ['ngRoute'])
   .when('/', {
     templateUrl: 'app/views/pages/home.html'
   })
+  .when('/contact', {
+      templateUrl: 'app/views/pages/contact.html'
+  })
   .when('/about', {
     templateUrl: 'app/views/pages/about.html'
   })

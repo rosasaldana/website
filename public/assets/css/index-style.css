@@ -1,47 +1,10 @@
-body, html {
-  padding-top: 5rem;
-  height: 100%;
-}
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+ /* Modifies the pages that are loaded in the ng-view
+ This includes the files that are stored in public/app/views
+ */
+.page-header{
+    padding-top: 6rem;
 }
 
-#container {
-	min-height: 100%;
-}
-
-/**
-#main {
-	overflow: auto;
-	padding-bottom: 100px;
-} **/
-
-footer {
-	background-color: #000;
-	clear: both;
-}
-
-a:link {
-	color: white;
-	text-decoration:none;
-	/* places link next to each other */
-	display: inline-block
-}
-
-a:visited {
-	color: white;
-	text-decoration:none;
-}
-
-a.hover {
-	color: white;
-	text-decoration:none;
-}
-
-.logo {
-	top: 20%;
-	left: 40%;
-	transform: translate(-50%. -50%);
-
+#pages{
+    min-height: 90vh;
 }

@@ -19,6 +19,9 @@ angular.module('mainController', ['authServices'])
       app.email = '';
     }
     app.loadingData = false;
+
+    //Force scrolling to the top of the page, when we load a new page to the screen
+    window.scrollTo(0, 0);
   });
 
 
@@ -33,7 +36,7 @@ angular.module('mainController', ['authServices'])
 
         //Redirecting to home page with two second delay
         $timeout(function(){
-          $location.path('/about');
+          $location.path('/profile');
           app.successMsg = app.loginData = '';
         }, 2000);
       }
