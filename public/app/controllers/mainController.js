@@ -3,8 +3,8 @@
 */
 angular.module('mainController', ['authServices', 'userServices'])
 
-    //mainCtrl called in index.js
-    .controller('mainCtrl', function(User, $timeout, $location, $rootScope) {
+    //mainCtrl called in index.html
+    .controller('mainCtrl', function(User, $timeout, $location, $rootScope, $scope) {
         var app = this;
         app.loadingData = true;
 
@@ -34,5 +34,4 @@ angular.module('mainController', ['authServices', 'userServices'])
                 $location.path('/home')
             }, 2000);
         };
-
     });
