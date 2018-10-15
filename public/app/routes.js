@@ -26,7 +26,9 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 templateUrl: 'app/views/pages/users/logout.html'
             })
             .when('/profile', {
-                templateUrl: 'app/views/pages/users/profile.html'
+                templateUrl: 'app/views/pages/users/profile.html',
+                controller: 'profileCtrl',
+                controllerAs: 'profileCtrl',
             })
             .otherwise({
                 redirectTo: '/'

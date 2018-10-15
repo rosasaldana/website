@@ -1,16 +1,32 @@
-<div class="page-header">
-    <h1>{{mainCtrl.username}}'s Profile</h1>
-</div>
+<div class="container-fluid">
 
-<table>
-    <tr>
-        <td>Username</td>
-        <td></td>
-        <td>Email</td>
-    </tr>
-    <tr>
-        <td>{{mainCtrl.username}}</td>
-        <td></td>
-        <td>{{mainCtrl.email}}</td>
-    </tr>
-</table>
+    <button type="button" class="btn btn-primary" ng-click="profileCtrl.displayMap()">Map</button>
+    <button type="button" class="btn btn-primary" ng-click="profileCtrl.displayProfile()">Profile</button>
+
+    <div class="container text-center" ng-show="profileCtrl.showProfile">
+        <div class="page-header">
+            <h1>{{mainCtrl.username}}'s Profile</h1>
+        </div>
+
+        <table class="table table-sm table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{mainCtrl.username}}</td>
+              <td>{{mainCtrl.email}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+    </div>
+
+    <div ng-show="profileCtrl.showMap">
+        <div mapbox></div>
+    </div>
+
+</div>
