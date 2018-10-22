@@ -5,48 +5,48 @@
 angular.module('userController', ['userServices'])
 
     .controller('userCtrl', function($http, $location, $timeout, User){
-        var app = this;
+        var user = this;
 
         //Function to register a user
         //This function is called in register.html
-        app.regUser = function(regData){
-            app.successMsg = app.errorMsg = false;
-            app.loading = true;
+        user.regUser = function(regData){
+            user.successMsg = user.errorMsg = false;
+            user.loading = true;
 
             //Calling to the userServices to registerUser, in userServices.js
-            User.registerUser(app.regData).then(function(data) {
-                app.loading = false;
+            User.registerUser(user.regData).then(function(data) {
+                user.loading = false;
                 if (data.data.success) {
-                    app.successMsg = data.data.message;
+                    user.successMsg = data.data.message;
 
                     //Redirecting to home page with two second delay after registration
                     $timeout(function() {
                         $location.path('/home');
                     }, 2000);
                 } else {
-                    app.errorMsg = data.data.message;
+                    user.errorMsg = data.data.message;
                 }
             });
         };
 
         //Function to login a user
         //This funciton is called in login.html
-        app.logIn = function(loginData) {
-            app.successMsg = app.errorMsg = false;
-            app.loading = true;
+        user.logIn = function(loginData) {
+            user.successMsg = user.errorMsg = false;
+            user.loading = true;
 
-            User.loginUser(app.loginData).then(function(data) {
-                app.loading = false;
+            User.loginUser(user.loginData).then(function(data) {
+                user.loading = false;
                 if (data.data.success) {
-                    app.successMsg = data.data.message;
+                    user.successMsg = data.data.message;
 
                     //Redirecting to home page with two second delay
                     $timeout(function() {
                         $location.path('/profile');
-                        app.successMsg = app.loginData = '';
-                    }, 2000);
+                        user.successMsg = user.loginData = '';
+                    }, 1000);
                 } else {
-                    app.errorMsg = data.data.message;
+                    user.errorMsg = data.data.message;
                 }
             });
         }
