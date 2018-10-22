@@ -26,12 +26,12 @@ angular.module('mainController', ['authServices', 'userServices'])
         });
 
         //Logging out the user (here instead of userController.js because it is called from the navbar)
-        app.logout = function() {
+        this.logout = function() {
             User.logout();
 
             //Redirecting to home page after logout
             $timeout(function() {
                 $location.path('/home')
-            }, 2000);
+            }, 500);
         };
     });

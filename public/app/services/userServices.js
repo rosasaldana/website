@@ -12,12 +12,12 @@ angular.module('userServices', ['authServices'])
 
         //User.registerUser(regData) -> this is how to call it
         userFactory.registerUser = function(regData) {
-            return $http.post('/api/users', regData);
+            return $http.post('/user-api/users', regData);
         }
 
         //User.loginUser() -> function call
         userFactory.loginUser = function(loginData) {
-            return $http.post('/api/authenticate', loginData).then(function(data) {
+            return $http.post('/user-api/authenticate', loginData).then(function(data) {
                 AuthToken.setToken(data.data.token);
                 return data;
             })
@@ -40,7 +40,7 @@ angular.module('userServices', ['authServices'])
         //User.getUser() -> function call
         userFactory.getUser = function() {
             if (AuthToken.getToken()) {
-                return $http.post('/api/currentUser');
+                return $http.get('/user-api/currentUser');
             } else {
                 $q.reject({
                     message: 'User has no token'
