@@ -23,6 +23,9 @@ module.exports = function(router){
                 next();
             });
         }
+        else{
+            next();
+        }
     });
 
     // Adding a location into the database
@@ -33,20 +36,19 @@ module.exports = function(router){
         if(req.coordinate == null){
             res.json({
                 success: false,
-                message: 'Ensure city and state are specified'
+                message: 'Ensure address is specified'
             });
         }
         else{
             newLocation.address = req.body.address;
             newLocation.longitude = req.coordinate[0];
             newLocation.latitude = req.coordinate[1];
-            newLocation.frequency = 100;
+            newLocation.frequency = 1;
 
             Location.findOne({address: req.body.address}, function(err, location){
                 if(err) throw err;
 
                 if(location){
-                    console.log("Found Location; Updating frequency");
                     location.frequency = location.frequency + 1;
                 }
                 else{
