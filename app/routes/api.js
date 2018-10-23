@@ -6,6 +6,7 @@ var User = require('../models/user');
 var jwt = require('jsonwebtoken'); //Used to keep the user logged in with cookies
 var secret = "GreatFiveTokenGenerator";
 
+
 module.exports = function(router) {
 
     //User registration route
@@ -101,6 +102,7 @@ module.exports = function(router) {
     router.post('/currentUser', function(req, res) {
         res.send(req.decoded);
     });
+
 
     return router;
 }
