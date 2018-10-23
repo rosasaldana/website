@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/TheGreatFive/website#readme",
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.4.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",

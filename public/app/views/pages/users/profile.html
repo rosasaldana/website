@@ -1,7 +1,12 @@
 <div class="container-fluid">
 
-    <button type="button" class="btn btn-primary" ng-click="profileCtrl.displayMap()">Map</button>
-    <button type="button" class="btn btn-primary" ng-click="profileCtrl.displayProfile()">Profile</button>
+    <label class="switch">
+        <input type="checkbox" ng-click="profileCtrl.toggleDisplay()">
+        <span class="slider round">
+            <span class="profile" ng-show="!profileCtrl.showProfile">PROFILE</span>
+            <span class="map" ng-show="!profileCtrl.showMap">MAP</span>
+        </span>
+    </label>
 
     <div class="container text-center" ng-show="profileCtrl.showProfile">
         <div class="page-header">
@@ -9,23 +14,23 @@
         </div>
 
         <table class="table table-sm table-bordered">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{mainCtrl.username}}</td>
-              <td>{{mainCtrl.email}}</td>
-            </tr>
-          </tbody>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{mainCtrl.username}}</td>
+                    <td>{{mainCtrl.email}}</td>
+                </tr>
+            </tbody>
         </table>
 
     </div>
 
-    <div ng-show="profileCtrl.showMap">
+    <div class="MapboxApi" ng-show="profileCtrl.showMap">
         <div mapbox></div>
     </div>
 
