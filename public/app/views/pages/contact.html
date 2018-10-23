@@ -1,7 +1,61 @@
-<div class="container">
+<div class="container" data-ng-controller="ContactFormCtrl as ContactFormCtrl">
 
-    <div class="page-header">
-        <h1>This is the contact us page</h1>
-    </div>
+	<div class="row">
+		<div class="col-12">
+			<h1 style="text-align: center"> Contact Us</h1>
+			<hr width="50%">
+			<p style="text-align: center">Have a question or concern? We're here to help!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-12">
+			<form name="contactForm" data-ng-submit="ContactFormCtrl.sendMail()">
+			  <div class="form-group">
+			    <label for="customerName">Name</label>
+			    <input type="text" class="form-control" placeholder="Name" data-ng-model="ContactFormCtrl.contactName">
+			  </div>
+			  <div class="form-group">
+			    <label for="customerEmail">Email address</label>
+			    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" 
+			    data-ng-model="ContactFormCtrl.contactEmail">
+			    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+			  </div>
+			  <div class="form-group">
+			  	<label for="CustomerMessage">Message</label>
+				<textarea class="form-control" rows="5" style="resize: none" data-ng-model="ContactFormCtrl.contactMsg"></textarea>
+			  </div>
+			  <button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+		<div class="col-md-6 col-12" style="padding-top: 5em; align-content: center;">
+			<div class="row">
+				<div class="col-12 offset-2 offset-md-4">
+					<p><i class="fa fa-map-marker" aria-hidden="true"></i> <span id="contact-name">PixMap</span> <br> 
+						<span style="padding-left: 7.5em">Gainesville, FL</span></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 offset-2 offset-md-4">
+					<p><i class="fa fa-envelope" aria-hidden="true"></i> <span id="contact-email">support@pixmap.com</span></p>
+					<hr width="60%" style="margin-left: -5px">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-2 offset-2 offset-md-4">
+					<i class="fa fa-facebook fa-2x" aria-hidden="true" style="cursor: pointer"></i>
+				</div>
+				<div class="col-2">
+					<i class="fa fa-twitter fa-2x" aria-hidden="true" style="cursor: pointer"></i>
+				</div>
+				<div class="col-2">
+					<i class="fa fa-rss fa-2x" aria-hidden="true" style="cursor: pointer"></i>
+				</div>
+				<div class="col-2">
+					<i class="fa fa-linkedin fa-2x" aria-hidden="true" style="cursor: pointer"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 </div>

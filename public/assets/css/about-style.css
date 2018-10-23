@@ -1,0 +1,54 @@
+#about-landing {
+	margin-top: -24px;
+	width: 100%;
+	min-height: 100vh;
+	padding-top: 40px;
+	background-image: url("/assets/images/city.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#about-arrow {
+	margin-top: 2em;
+	padding-left: 1.2em;
+	cursor: pointer;
+}
+
+#about-team {
+	width: 100%;
+	min-height: 85vh;
+	padding-top: 40px;
+}
+
+#about-slogan {
+	text-align: center;
+	font-weight: bold;
+	margin-top: 2em;
+}
+
+#about-img-row {
+	margin-top: 6em;
+}
+
+.about-txt {
+	margin-top: 1em;
+	text-align: center;
+}
+
+.fa-arrow-alt-circle-down {
+	margin-top: 1em;
+	padding-left: 38%;
+	cursor: pointer;
+}
+
+.about-img {
+	max-width: 190px;
+	padding-right: 50px;
+}
+
+.about-profile {
+	border-radius: 100%;
+	margin-bottom: 20px;
+	max-height: 140px;
+	max-width: 140px;
+}
