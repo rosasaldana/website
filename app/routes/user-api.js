@@ -102,6 +102,17 @@ module.exports = function(router) {
         res.send(req.decoded);
     });
 
+    //Retrieving all users
+    //http://<url>/user-api/getAllUsers
+    router.get('/getAllUsers', function(req, res){
+        User.find({}, '-_id username', function(err, users){
+
+            if(err) throw err;
+
+            res.send(users);
+        });
+    });
+
     //Middleware for following a user and unfollowing a user
     router.use(function(req, res, next){
         if(req.body.username && req.body.followingUser){

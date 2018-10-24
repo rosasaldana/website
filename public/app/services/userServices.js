@@ -48,5 +48,6 @@ angular.module('userServices', ['authServices'])
             }
         }
 
+
         return userFactory;
     });
