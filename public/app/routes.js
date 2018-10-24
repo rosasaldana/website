@@ -7,10 +7,14 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 templateUrl: 'app/views/pages/home.html'
             })
             .when('/contact', {
-                templateUrl: 'app/views/pages/contact.html'
+                templateUrl: 'app/views/pages/contact.html',
+                controller: 'contactFormCtrl',
+                controllerAs: 'contactFormCtrl'
             })
             .when('/about', {
-                templateUrl: 'app/views/pages/about.html'
+                templateUrl: 'app/views/pages/about.html',
+                controller: 'aboutCtrl',
+                controllerAs: 'aboutCtrl'
             })
             .when('/register', {
                 templateUrl: 'app/views/pages/users/register.html',

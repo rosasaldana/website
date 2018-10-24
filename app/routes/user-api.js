@@ -113,6 +113,15 @@ module.exports = function(router) {
         });
     });
 
+    //Retrieving friends from a user
+    //http://<url>/user-api/getFriends
+    router.get('/getFriends/:user', function(req, res){
+        console.log(req.params.user);
+        User.find({username: req.params.user}, '-_id following', function(err, data){
+            res.send(data);
+        });
+    });
+
     //Middleware for following a user and unfollowing a user
     router.use(function(req, res, next){
         if(req.body.username && req.body.followingUser){
