@@ -1,7 +1,7 @@
 /*
     This file contains the profileController which is used in profile.html
     Also includes the directive needed to render the mapbox onto the page view
-    Includes map functionality to add the heat map layer. 
+    Includes map functionality to add the heat map layer.
 */
 
 angular.module('profileController', ['locationServices'])
@@ -169,7 +169,6 @@ angular.module('profileController', ['locationServices'])
         //Calling a service from locationServices
         $scope.getPhotoLocations = function(){
             Locations.getLocations().then(function(data) {
-                console.log(data.data);
                 $scope.geojson = data.data;
             });
         }
@@ -180,7 +179,6 @@ angular.module('profileController', ['locationServices'])
             profile.showProfile = !profile.showProfile;
 
             if(profile.showMap){
-                console.log('here');
                 profile.getUserLocation();
             }
         };
