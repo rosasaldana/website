@@ -8,19 +8,3 @@
 #pages{
     min-height: calc(100vh - 170px);
 }
-
-.MapboxApi {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.mapboxgl-canvas, .mapboxgl-map{
-    margin: auto;
-    height: calc(100vh - 170px);
-    width: 98%;
-}
-
-#geocoder-container{
-    min-width: 50%;
-    margin-left: 25%;
-}

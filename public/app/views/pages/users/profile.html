@@ -1,19 +1,55 @@
 <div class="container-fluid">
 
-    <label class="switch">
-        <input type="checkbox" ng-click="profileCtrl.toggleDisplay()">
-        <span class="slider round">
-            <span class="profile" ng-show="!profileCtrl.showProfile">PROFILE</span>
-            <span class="map" ng-show="!profileCtrl.showMap">MAP</span>
-        </span>
-    </label>
+    <div class="profile-page">
 
-    <div class="container text-center" ng-show="profileCtrl.showProfile">
-        <div class="page-header">
-            <h1>{{mainCtrl.username}}'s Profile</h1>
+        <div class="row">
+            <div class="col top-margin">
+                <label class="switch pull-right">
+                    <input type="checkbox" ng-click="profileCtrl.toggleDisplay()">
+                    <span class="slider round">
+                        <span class="profile" ng-show="!profileCtrl.showProfile">PROFILE</span>
+                        <span class="map" ng-show="!profileCtrl.showMap">MAP</span>
+                    </span>
+                </label>
+            </div>
         </div>
 
-        <table class="table table-sm table-bordered">
+        <div class="profile-content">
+
+            <div class="row">
+                <div class="col top-margin">
+                    <label class="top-margin pull-right">
+                        <input type="text" class="form-control" placeholder="Search"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row justify-content-between top-margin">
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        <p>posts go here</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="MapboxApi" ng-show="profileCtrl.showMap">
+                        <div mapbox></div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="jumbotron">
+                        <p>friends list goes here</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+        <!-- <div class="page-header">
+            <h1>{{mainCtrl.username}}'s Profile</h1>
+        </div> -->
+
+        <!-- <table class="table table-sm table-bordered">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Username</th>
@@ -26,12 +62,8 @@
                     <td>{{mainCtrl.email}}</td>
                 </tr>
             </tbody>
-        </table>
+        </table> -->
 
-    </div>
 
-    <div class="MapboxApi" ng-show="profileCtrl.showMap">
-        <div mapbox></div>
-    </div>
 
 </div>
