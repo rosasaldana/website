@@ -48,5 +48,15 @@ angular.module('userServices', ['authServices'])
             }
         }
 
+        //User.getAllUsers() -> function call
+        userFactory.getAllUsers = function() {
+            return $http.get('/user-api/getAllUsers');
+        }
+
+        //User.getFriends() -> function call
+        userFactory.getFriends = function(){
+            return $http.get('/user-api/getFriends');
+        }
+
         return userFactory;
     });
