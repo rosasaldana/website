@@ -49,7 +49,7 @@ angular.module('userServices', ['authServices'])
         }
 
         //User.getAllUsers() -> function call
-        userFactory.getUser = function() {
+        userFactory.getAllUsers = function() {
             return $http.get('/user-api/getAllUsers');
         }
 
