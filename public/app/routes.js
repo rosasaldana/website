@@ -8,8 +8,8 @@ var app = angular.module('appRoutes', ['ngRoute'])
             })
             .when('/contact', {
                 templateUrl: 'app/views/pages/contact.html',
-                controller: 'contactFormCtrl',
-                controllerAs: 'contactFormCtrl'
+                controller: 'contactCtrl',
+                controllerAs: 'contactCtrl'
             })
             .when('/about', {
                 templateUrl: 'app/views/pages/about.html',
