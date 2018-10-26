@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="ContactFormCtrl as ContactFormCtrl">
+<div class="container">
 
 	<div class="row">
 		<div class="col-12">
@@ -9,20 +9,20 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6 col-12">
-			<form name="contactForm" data-ng-submit="ContactFormCtrl.sendMail()">
+			<form id="contactMsgForm" name="contactForm" method="post" ng-submit="contactCtrl.sendMail()">
 			  <div class="form-group">
 			    <label for="customerName">Name</label>
-			    <input type="text" class="form-control" placeholder="Name" data-ng-model="ContactFormCtrl.contactName">
+			    <input type="text" class="form-control" placeholder="Name" name="contactName" ng-model="contactCtrl.contactName">
 			  </div>
 			  <div class="form-group">
 			    <label for="customerEmail">Email address</label>
 			    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" 
-			    data-ng-model="ContactFormCtrl.contactEmail">
+			    name="contactEmail" ng-model="contactCtrl.contactEmail">
 			    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 			  </div>
 			  <div class="form-group">
 			  	<label for="CustomerMessage">Message</label>
-				<textarea class="form-control" rows="5" style="resize: none" data-ng-model="ContactFormCtrl.contactMsg"></textarea>
+				<textarea class="form-control" rows="5" style="resize: none" name="contactMsg" ng-model="contactCtrl.contactMsg"></textarea>
 			  </div>
 			  <button type="submit" class="btn btn-primary">Submit</button>
 			</form>
@@ -36,7 +36,7 @@
 			</div>
 			<div class="row">
 				<div class="col-12 offset-2 offset-md-4">
-					<p><i class="fa fa-envelope" aria-hidden="true"></i> <span id="contact-email">support@pixmap.com</span></p>
+					<p><i class="fa fa-envelope" aria-hidden="true"></i> <span id="contact-email">pixmapteam@gmail.com</span></p>
 					<hr width="60%" style="margin-left: -5px">
 				</div>
 			</div>

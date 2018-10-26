@@ -5,7 +5,6 @@ angular.module('aboutController', [])
     .controller('aboutCtrl', function(){
         var app=this;
 
-
         app.scrollDown = function(){
            	$('html,body').animate({
 			scrollTop: $("#about-team").offset().top -65
