@@ -4,10 +4,12 @@ var express = require('express'),
     morgan = require('morgan'),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
-    router = express.Router();
+    router = express.Router(),
     userAppRoutes = require('./app/routes/user-api')(router),           //User-api routes
-    locationAppRoutes = require('./app/routes/location-api')(router);   //location-api routes
-    path = require('path');
+    locationAppRoutes = require('./app/routes/location-api')(router),   //location-api routes
+    contactAppRoutes = require('./app/routes/contact-api')(router),
+    path = require('path'),
+    nodemailer = require('nodemailer');
 
 var app = express();
 var port = process.env.PORT || 8080;
@@ -18,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true})); //To parse application/x-www-
 
 app.use('/user-api', userAppRoutes); //Back-end routes user http://<url>/user-api
 app.use('/location-api', locationAppRoutes); //Back-end routes for location http://<url>/location-api
+app.use('/contact-api', contactAppRoutes);
 
 app.use(express.static(__dirname + '/public')); //Giving the front-end access to this folder
 
@@ -36,6 +39,8 @@ mongoose.connect(process.env.MONGODB_URI, function(err){
 app.get('*', function(req, res){
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
+
+
 
 //Instantiating a server at port of the process environment (heroku) or at 8080 (default).
 app.listen(port, function() {

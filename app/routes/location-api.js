@@ -6,6 +6,7 @@ var Location = require('../models/location');
 var mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 var geocodingClient = mbxGeocoding({accessToken: 'pk.eyJ1IjoiZG91Z2FndWVycmEiLCJhIjoiY2puNHpwNGk4MDA3azNrbGttMnlndTd6YSJ9.zPFiViInpT-AH8lhvsOE8A'});
 
+
 module.exports = function(router){
 
     // Middleware to convert location to coordinates before storing in database
