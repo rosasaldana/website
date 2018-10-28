@@ -13,7 +13,7 @@ module.exports = function(router) {
     router.post('/users', function(req, res) {
         var user = new User();
         user.username = req.body.username;
-        user.password = req.body.password;
+        user.password = user.hashPassword(req.body.password);
         user.email = req.body.email;
 
         if (req.body.username == null || req.body.username == '' || req.body.password == null || req.body.password == '' || req.body.email == null || req.body.email == '') {
@@ -51,7 +51,14 @@ module.exports = function(router) {
                     success: false,
                     message: "Could not authenticate user"
                 });
-            } else if (req.body.password != null && !user.comparePassword(req.body.password)) {
+            }
+            else if(req.body.password == null){
+                res.send({
+                    success: false,
+                    message: "Password not entered"
+                });
+            }
+            else if(!user.comparePassword(req.body.password)) {
                 res.send({
                     success: false,
                     message: "Could not authenticate password"

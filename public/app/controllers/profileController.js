@@ -166,20 +166,27 @@ angular.module('profileController', ['locationServices', 'userServices'])
         profile.username = $scope.username;
         profile.friends = [];
 
-        //Retrieving all users
-        User.getAllUsers(profile.username).then(function(response){
-            profile.users = response.data;
-        });
+        $scope.$on('$viewContentLoaded', function(){
 
-        //Retreiving the photo locations from the server
-        //Calling a service from locationServices
-        Locations.getLocations().then(function(data) {
-            $scope.geojson = data.data;
-        });
+            User.getUser().then(function(response){
 
-        //Retrieving the current user's friends
-        User.getFriends(profile.username).then(function(response){
-            profile.friends = response.data[0].following.users;
+                //Retrieving the current user's friends
+                profile.username = response.data.username;
+                User.getFriends(response.data.username).then(function(response){
+                    profile.friends = response.data[0].following.users;
+                });
+
+                //Retrieving all users
+                User.getAllUsers(profile.username).then(function(response){
+                    profile.users = response.data;
+                });
+            });
+
+            //Retreiving the photo locations from the server
+            //Calling a service from locationServices
+            Locations.getLocations().then(function(data) {
+                $scope.geojson = data.data;
+            });
         });
 
         //Adding a friend for current user
