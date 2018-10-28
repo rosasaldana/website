@@ -4,23 +4,20 @@
     Includes map functionality to add the heat map layer.
 */
 
-angular.module('profileController', ['locationServices'])
+angular.module('profileController', ['locationServices', 'userServices'])
 
     //Directive needed to load mapbox onto the screen
     .directive('mapbox', function() {
         return {
             template: "<div id='map'><div>", //Way to load map in the html file
             link: function(scope, element, attributes) {
-
-                //Obtaining photoLocations from back-end to render on map
-                scope.getPhotoLocations();
-
                 //Initial load of the map
                 mapboxgl.accessToken = 'pk.eyJ1IjoiZG91Z2FndWVycmEiLCJhIjoiY2puNHpwNGk4MDA3azNrbGttMnlndTd6YSJ9.zPFiViInpT-AH8lhvsOE8A';
                 var map = new mapboxgl.Map({
                     container: 'map', // container id
                     style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location
-                    zoom: 1 //Zoom all the way out would show the entire map
+                    center: [20.000, 0],
+                    zoom: 2 //Zoom all the way out would show the entire map
                 });
 
                 //Adding the GeoCoder Api to search within a map
@@ -28,6 +25,18 @@ angular.module('profileController', ['locationServices'])
                     accessToken: mapboxgl.accessToken
                 });
                 map.addControl(geocoder);
+
+                //Adding user location to the map
+                map.addControl(new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    fitBoundsOptions: {
+                        maxZoom: 7
+                    },
+                    trackUserLocation: true,
+                    showUserLocation: false
+                }), 'bottom-right');
 
 
                 //On loading the map creating a heat-map layer and placing circles
@@ -147,50 +156,70 @@ angular.module('profileController', ['locationServices'])
                         }
                     });
                 });
-
-                //Updates map location to the user's current location
-                scope.updateMapLocation = function(longitude, latitude) {
-                    map.jumpTo({
-                        center: [longitude, latitude],
-                        zoom: 5
-                    });
-                };
             }
         };
     })
 
     //profileCtrl called in profile.html
-    .controller('profileCtrl', function($scope, Locations) {
+    .controller('profileCtrl', function($scope, Locations, User) {
         var profile = this;
-        profile.showMap = false;
-        profile.showProfile = true;
+        profile.username = $scope.username;
+        profile.friends = [];
+
+        //Retrieving all users
+        User.getAllUsers(profile.username).then(function(response){
+            profile.users = response.data;
+        });
 
         //Retreiving the photo locations from the server
         //Calling a service from locationServices
-        $scope.getPhotoLocations = function(){
-            Locations.getLocations().then(function(data) {
-                $scope.geojson = data.data;
+        Locations.getLocations().then(function(data) {
+            $scope.geojson = data.data;
+        });
+
+        //Retrieving the current user's friends
+        User.getFriends(profile.username).then(function(response){
+            profile.friends = response.data[0].following.users;
+        });
+
+        //Adding a friend for current user
+        profile.followUser = function(user){
+            var followUserRequest = {
+                username: profile.username,
+                followingUser: user
+            };
+
+            User.addFriend(followUserRequest).then(function(response){
+                if(response.data.success == true){
+                    profile.friends.push(user);
+                }
+                else{
+                    profile.errorMsg = response.data.message;
+                }
             });
+        };
+
+        //Unfollowing a friend from the friends list
+        profile.unfollowUser = function(user){
+            var unfollowUserRequest = {
+                username: profile.username,
+                followingUser: user
+            };
+
+            User.removeFriend(unfollowUserRequest).then(function(response){
+                if(response.data.success == true){
+                    var index = profile.friends.indexOf(user);
+                    profile.friends.splice(index, 1);
+                }
+            });
+        };
+
+        profile.followsUser = function(user){
+            if(profile.friends.indexOf(user) != -1){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
-
-        //Toggle display between map and profile
-        profile.toggleDisplay = function(){
-            profile.showMap = !profile.showMap;
-            profile.showProfile = !profile.showProfile;
-
-            if(profile.showMap){
-                profile.getUserLocation();
-            }
-        };
-
-        //Requesting user's current location to update map view
-        profile.getUserLocation = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    $scope.updateMapLocation(position.coords.longitude, position.coords.latitude);
-                });
-            } else {
-                console.log('Location Request Denied');
-            }
-        };
     });

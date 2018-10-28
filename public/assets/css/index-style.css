@@ -1,3 +1,4 @@
+
 .nav{
     margin-bottom: 50px;
     height: 64px;
@@ -7,4 +8,8 @@
 /* Min page height = 100vh - (64px + 50px) - (56px)*/
 #pages{
     min-height: calc(100vh - 170px);
+}
+
+footer{
+    margin-top: 20px;
 }

@@ -15,6 +15,7 @@ angular.module('mainController', ['authServices', 'userServices'])
                     if(data.data.success != false){
                         app.isLoggedIn = true;
                         app.username = data.data.username;
+                        $scope.username = app.username;
                         app.email = data.data.email;
                     }
                     else{

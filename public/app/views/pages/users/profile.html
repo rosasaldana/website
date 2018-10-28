@@ -1,69 +1,89 @@
 <div class="container-fluid">
 
-    <div class="profile-page">
-
-        <div class="row">
-            <div class="col top-margin">
-                <label class="switch pull-right">
-                    <input type="checkbox" ng-click="profileCtrl.toggleDisplay()">
-                    <span class="slider round">
-                        <span class="profile" ng-show="!profileCtrl.showProfile">PROFILE</span>
-                        <span class="map" ng-show="!profileCtrl.showMap">MAP</span>
-                    </span>
-                </label>
-            </div>
-        </div>
-
-        <div class="profile-content">
-
-            <div class="row">
-                <div class="col top-margin">
-                    <label class="top-margin pull-right">
-                        <input type="text" class="form-control" placeholder="Search"/>
-                    </label>
-                </div>
-            </div>
-
-            <div class="row justify-content-between top-margin">
-                <div class="col-md-4">
-                    <div class="jumbotron">
-                        <p>posts go here</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="MapboxApi" ng-show="profileCtrl.showMap">
-                        <div mapbox></div>
-                    </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="jumbotron">
-                        <p>friends list goes here</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
+    <!-- Mapbox display -->
+    <div class="MapboxApi">
+        <div mapbox></div>
     </div>
-        <!-- <div class="page-header">
-            <h1>{{mainCtrl.username}}'s Profile</h1>
-        </div> -->
 
-        <!-- <table class="table table-sm table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Username</th>
-                    <th scope="col">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{mainCtrl.username}}</td>
-                    <td>{{mainCtrl.email}}</td>
-                </tr>
-            </tbody>
-        </table> -->
+    <div class="row justify-content-between profile-content">
 
+        <!-- Posts -->
+        <div class="col-md-4 top-margin border border-white">
+            <p class="text text-white">posts go here</p>
+        </div>
 
+        <!-- Displaying user's friend -->
+        <div class="col-sm-2 top-margin">
+            <div class="row pull-right">
+                <table class="table table-sm table-responsive">
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" class="form-control search-bar" placeholder="Friends" ng-model="friendSearchText" />
+                            </td>
+                        </tr>
+                        <tr ng-repeat="friend in profileCtrl.friends | filter: friendSearchText">
+                            <td class="text text-white">{{friend}}</td>
+                            <td>
+                                <img class="del-user-img pull-right" src="assets/images/unfollow-user.png" ng-click="profileCtrl.unfollowUser(friend)" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <img class="add-user-img pull-right" src="assets/images/add-user.png" data-toggle="modal" data-target="#addFriendModal" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding a friend -->
+    <div class="modal fade" id="addFriendModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Follow User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body  -->
+                <div class="modal-body">
+
+                    <!-- Displaying all users -->
+                    <input type="text" class="form-control" placeholder="Search" ng-model="userSearchText" />
+                    <table class="table top-margin">
+                        <tbody>
+                            <tr ng-repeat="user in profileCtrl.users | filter: userSearchText">
+                                <td>Insert Profile Pic</td>
+                                <td>{{user}}</td>
+                                <td ng-show="!profileCtrl.followsUser(user)">
+                                    <button type="button" class="btn btn-primary" ng-click="profileCtrl.followUser(user)">
+                                        Follow
+                                    </button>
+                                </td>
+                                <td ng-show="profileCtrl.followsUser(user)">
+                                    <button type="button" class="btn btn-danger" ng-click="profileCtrl.unfollowUser(user)">
+                                        Unfollow
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="show-hide-message text-center" ng-show="profileCtrl.errorMsg">
+                        <div class="alert alert-danger">{{profileCtrl.errorMsg}}</div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

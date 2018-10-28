@@ -49,13 +49,23 @@ angular.module('userServices', ['authServices'])
         }
 
         //User.getAllUsers() -> function call
-        userFactory.getAllUsers = function() {
-            return $http.get('/user-api/getAllUsers');
+        userFactory.getAllUsers = function(user) {
+            return $http.get('/user-api/getAllUsers/' + user);
         }
 
         //User.getFriends() -> function call
-        userFactory.getFriends = function(){
-            return $http.get('/user-api/getFriends');
+        userFactory.getFriends = function(user){
+            return $http.get('/user-api/getFriends/' + user);
+        }
+
+        //User.addFriend() -> function call
+        userFactory.addFriend = function(followingUserData){
+            return $http.put('/user-api/followUser', followingUserData);
+        }
+
+        //User.removeFriend() -> function call
+        userFactory.removeFriend = function(unfollowUserData){
+            return $http.put('/user-api/unfollowUser', unfollowUserData);
         }
 
         return userFactory;

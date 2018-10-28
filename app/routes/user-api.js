@@ -102,22 +102,27 @@ module.exports = function(router) {
         res.send(req.decoded);
     });
 
-    //Retrieving all users
+    //Retrieving all users except current user
     //http://<url>/user-api/getAllUsers
-    router.get('/getAllUsers', function(req, res){
+    router.get('/getAllUsers/:currentUser', function(req, res){
+        var allUsers = [];
+
         User.find({}, '-_id username', function(err, users){
-
             if(err) throw err;
-
-            res.send(users);
+            for(index in users){
+                if(users[index].username != req.params.currentUser){
+                    allUsers.push(users[index].username);
+                }
+            }
+            res.send(allUsers);
         });
     });
 
     //Retrieving friends from a user
     //http://<url>/user-api/getFriends
     router.get('/getFriends/:user', function(req, res){
-        console.log(req.params.user);
         User.find({username: req.params.user}, '-_id following', function(err, data){
+            if(err) throw err;
             res.send(data);
         });
     });
@@ -156,19 +161,19 @@ module.exports = function(router) {
                 if(err) throw err;
 
                 if(user){
-                    if(user.following.users.indexOf(req.followingUser._id) != -1){
+                    if(user.following.users.indexOf(req.followingUser.username) != -1){
                         res.json({
                             success: false,
-                            message: 'Already following user: ' + req.body.followingUser
+                            message: 'Already following user'
                         });
                     }
                     else{
-                        user.following.users.push(req.followingUser._id);
+                        user.following.users.push(req.followingUser.username);
                         user.save(function(err){
                             if(err){
                                 res.json({
                                     success: false,
-                                    message: 'Unable to follow ' + req.body.followingUser
+                                    message: 'Unable to follow'
                                 });
                             }
                             else{
@@ -204,20 +209,20 @@ module.exports = function(router) {
                 if(err) throw err;
 
                 if(user){
-                    var index = user.following.users.indexOf(req.followingUser._id);
+                    var index = user.following.users.indexOf(req.followingUser.username);
                     if(index != -1){
                         user.following.users.splice(index, 1);
                         user.save(function(err){
                             if(err){
                                 res.json({
                                     success: false,
-                                    message: 'Unable to unfollow ' + req.body.followingUser
+                                    message: 'Unable to unfollow'
                                 });
                             }
                             else{
                                 res.json({
                                     success: true,
-                                    message: 'Successfully unfollowed ' + req.body.followingUser
+                                    message: 'Successfully unfollowed'
                                 })
                             }
                         });
@@ -225,7 +230,7 @@ module.exports = function(router) {
                     else{
                         res.json({
                             success: false,
-                            message: 'User does not follow ' + req.body.followingUser
+                            message: 'Unable to unfollow'
                         });
                     }
                 }
