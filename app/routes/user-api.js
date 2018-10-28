@@ -102,5 +102,147 @@ module.exports = function(router) {
         res.send(req.decoded);
     });
 
+    //Retrieving all users except current user
+    //http://<url>/user-api/getAllUsers
+    router.get('/getAllUsers/:currentUser', function(req, res){
+        var allUsers = [];
+
+        User.find({}, '-_id username', function(err, users){
+            if(err) throw err;
+            for(index in users){
+                if(users[index].username != req.params.currentUser){
+                    allUsers.push(users[index].username);
+                }
+            }
+            res.send(allUsers);
+        });
+    });
+
+    //Retrieving friends from a user
+    //http://<url>/user-api/getFriends
+    router.get('/getFriends/:user', function(req, res){
+        User.find({username: req.params.user}, '-_id following', function(err, data){
+            if(err) throw err;
+            res.send(data);
+        });
+    });
+
+    //Middleware for following a user and unfollowing a user
+    router.use(function(req, res, next){
+        if(req.body.username && req.body.followingUser){
+            User.findOne({username: req.body.followingUser}, function(err, followingUser){
+                if (err) throw err;
+                if(followingUser){
+                    req.followingUser = followingUser;
+                }
+                else{
+                    req.error = "Following user does not exist in database";
+                }
+                next();
+            });
+        }
+        else{
+            req.error = "Ensure that user and the requested user are specified";
+            next();
+        }
+    });
+
+    //Route to follow a user
+    //http://<url>/user-api/connectUser
+    router.put('/followUser', function(req, res){
+        if(req.error){
+            res.json({
+                success: false,
+                message: req.error
+            });
+        }
+        else{
+            User.findOne({username: req.body.username}, function(err, user){
+                if(err) throw err;
+
+                if(user){
+                    if(user.following.users.indexOf(req.followingUser.username) != -1){
+                        res.json({
+                            success: false,
+                            message: 'Already following user'
+                        });
+                    }
+                    else{
+                        user.following.users.push(req.followingUser.username);
+                        user.save(function(err){
+                            if(err){
+                                res.json({
+                                    success: false,
+                                    message: 'Unable to follow'
+                                });
+                            }
+                            else{
+                                res.json({
+                                    success: true,
+                                    message: 'Successfully followed user'
+                                });
+                            }
+                        })
+                    }
+                }
+                else{
+                    res.json({
+                        success: false,
+                        message: 'User does not exist'
+                    });
+                }
+            });
+        }
+    });
+
+    //Route to unfollow a user
+    //http://<url>/user-api/unfollowUser
+    router.put('/unfollowUser', function(req, res){
+        if(req.error){
+            res.json({
+                success: false,
+                message: req.error
+            });
+        }
+        else{
+            User.findOne({username: req.body.username}, function(err, user){
+                if(err) throw err;
+
+                if(user){
+                    var index = user.following.users.indexOf(req.followingUser.username);
+                    if(index != -1){
+                        user.following.users.splice(index, 1);
+                        user.save(function(err){
+                            if(err){
+                                res.json({
+                                    success: false,
+                                    message: 'Unable to unfollow'
+                                });
+                            }
+                            else{
+                                res.json({
+                                    success: true,
+                                    message: 'Successfully unfollowed'
+                                })
+                            }
+                        });
+                    }
+                    else{
+                        res.json({
+                            success: false,
+                            message: 'Unable to unfollow'
+                        });
+                    }
+                }
+                else{
+                    res.json({
+                        success: false,
+                        message: 'User does not exist'
+                    });
+                }
+            });
+        }
+    });
+
     return router;
 }
