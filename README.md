@@ -7,7 +7,7 @@
 5. Ask questions if you don't know something.
 
 ## Group Members: 
-* Rosa Saldana : rositaguimoye@gmail.com
+* Rosa Saldana : rositaguimoye@gmail.com | rosasaldana@ufl.edu
 * James Dika : jamesdika@ufl.edu
 * Douglas Guerra : dougiewar@ufl.edu 
 * Daniel Castro : danielc13@ufl.edu

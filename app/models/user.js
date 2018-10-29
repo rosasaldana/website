@@ -22,18 +22,19 @@ var UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    following: {
+        users: [String]
     }
 });
 
 //Pre-save function to hash user password
-UserSchema.pre('save', function(next) {
-    var user = this;
+UserSchema.methods.hashPassword = function(password){
     bcrypt.hash(user.password, null, null, function(err, hash) {
         if (err) return next(err);
-        user.password = hash;
-        next();
+        return hash;
     });
-});
+}
 
 //Function to authenticate password from user
 //Input is password from user and output is a boolean
