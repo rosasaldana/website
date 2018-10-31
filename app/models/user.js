@@ -28,14 +28,6 @@ var UserSchema = new Schema({
     }
 });
 
-//Pre-save function to hash user password
-UserSchema.methods.hashPassword = function(password){
-    bcrypt.hash(user.password, null, null, function(err, hash) {
-        if (err) return next(err);
-        return hash;
-    });
-}
-
 //Function to authenticate password from user
 //Input is password from user and output is a boolean
 UserSchema.methods.comparePassword = function(password) {

@@ -7,9 +7,10 @@ var express = require('express'),
     router = express.Router(),
     userAppRoutes = require('./app/routes/user-api')(router),           //User-api routes
     locationAppRoutes = require('./app/routes/location-api')(router),   //location-api routes
-    contactAppRoutes = require('./app/routes/contact-api')(router),
+    contactAppRoutes = require('./app/routes/contact-api')(router),     //contact-api routes
+    profileAppRoutes = require('./app/routes/profile-api')(router),     //profile-api routes
     path = require('path'),
-    nodemailer = require('nodemailer');
+    Grid = require('gridfs-stream');
 
 var app = express();
 var port = process.env.PORT || 8080;
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true})); //To parse application/x-www-
 app.use('/user-api', userAppRoutes); //Back-end routes user http://<url>/user-api
 app.use('/location-api', locationAppRoutes); //Back-end routes for location http://<url>/location-api
 app.use('/contact-api', contactAppRoutes);
+app.use('/profile-api', profileAppRoutes);
 
 app.use(express.static(__dirname + '/public')); //Giving the front-end access to this folder
 
@@ -35,6 +37,7 @@ mongoose.connect(process.env.MONGODB_URI, function(err){
     console.log('Successfully connected to database');
   }
 });
+
 
 app.get('*', function(req, res){
   res.sendFile(path.join(__dirname + '/public/app/views/index.html'));

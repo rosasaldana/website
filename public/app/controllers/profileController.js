@@ -4,7 +4,7 @@
     Includes map functionality to add the heat map layer.
 */
 
-angular.module('profileController', ['locationServices', 'userServices'])
+angular.module('profileController', ['locationServices', 'userServices', 'uploadServices'])
 
     //Directive needed to load mapbox onto the screen
     .directive('mapbox', function() {
@@ -160,11 +160,31 @@ angular.module('profileController', ['locationServices', 'userServices'])
         };
     })
 
+    .directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    }
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }])
+
     //profileCtrl called in profile.html
-    .controller('profileCtrl', function($scope, Locations, User) {
+    .controller('profileCtrl', function($scope, Locations, User, ImagePosts) {
         var profile = this;
         profile.username = $scope.username;
         profile.friends = [];
+        profile.imageposts = [];
 
         $scope.$on('$viewContentLoaded', function(){
 
@@ -172,6 +192,7 @@ angular.module('profileController', ['locationServices', 'userServices'])
 
                 //Retrieving the current user's friends
                 profile.username = response.data.username;
+
                 User.getFriends(response.data.username).then(function(response){
                     profile.friends = response.data[0].following.users;
                 });
@@ -179,7 +200,14 @@ angular.module('profileController', ['locationServices', 'userServices'])
                 //Retrieving all users
                 User.getAllUsers(profile.username).then(function(response){
                     profile.users = response.data;
+
                 });
+
+                //Retrieve current user image posts
+                ImagePosts.getPhotos(profile.username).then(function(response) {
+                profile.imageposts = response.data;
+                console.log(response.data);
+            });
             });
 
             //Retreiving the photo locations from the server
@@ -187,6 +215,8 @@ angular.module('profileController', ['locationServices', 'userServices'])
             Locations.getLocations().then(function(data) {
                 $scope.geojson = data.data;
             });
+
+
         });
 
         //Adding a friend for current user
@@ -229,4 +259,5 @@ angular.module('profileController', ['locationServices', 'userServices'])
                 return false;
             }
         }
+
     });
