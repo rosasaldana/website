@@ -5,6 +5,7 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken'); //Used to keep the user logged in with cookies
 var secret = "GreatFiveTokenGenerator";
+var bcrypt = require('bcrypt-nodejs');
 
 module.exports = function(router) {
 
@@ -13,9 +14,12 @@ module.exports = function(router) {
     router.post('/users', function(req, res) {
         var user = new User();
         user.username = req.body.username;
-        user.password = user.hashPassword(req.body.password);
         user.email = req.body.email;
-
+        bcrypt.hash(req.body.password, null, null, function(err, hash) {
+            if(err) return next(err);
+            user.password = hash;
+        });
+        
         if (req.body.username == null || req.body.username == '' || req.body.password == null || req.body.password == '' || req.body.email == null || req.body.email == '') {
             res.json({
                 success: false,
@@ -26,7 +30,7 @@ module.exports = function(router) {
                 if (err) {
                     res.json({
                         success: false,
-                        message: 'Username or Email already exists!'
+                        message: 'Username or Email already exists!' + err
                     });
                 } else {
                     res.send({
