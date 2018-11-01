@@ -1,0 +1,17 @@
+.home-page {
+    position: relative;
+    z-index: 1;
+}
+
+.home-page .home-background {
+    position: fixed;
+    z-index: -1;
+    opacity: .4;
+    margin-top: -38px;
+	width: 100%;
+	min-height: 87vh;
+	padding-top: 40px;
+    background: url("/assets/images/WaterColorBackground.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
