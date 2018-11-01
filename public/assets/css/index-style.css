@@ -9,3 +9,7 @@
 #pages{
     min-height: calc(100vh - 170px);
 }
+
+.dropdown-menu{
+    left: -100px;
+}

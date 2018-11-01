@@ -34,6 +34,9 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controller: 'profileCtrl',
                 controllerAs: 'profileCtrl',
             })
+            .when('/profileSettings', {
+                templateUrl: 'app/views/pages/users/settings.html'
+            })
             .otherwise({
                 redirectTo: '/'
             });
