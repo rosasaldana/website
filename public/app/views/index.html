@@ -36,7 +36,6 @@
     <link rel="stylesheet" type="text/css" href="assets/css/contact-style.css">
     <link rel="stylesheet" type="text/css" href="assets/css/profile-style.css">
 
-
     <!-- Angular Config/Routes -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
     <script src="app/app.js"></script>
@@ -48,6 +47,7 @@
     <script src="app/controllers/profileController.js"></script>
     <script src="app/controllers/aboutController.js"></script>
     <script src="app/controllers/contactController.js"></script>
+    <script src="app/controllers/settingsController.js"></script>
 
     <!-- Angular Services  -->
     <script src="app/services/userServices.js"></script>
@@ -57,8 +57,6 @@
     <script src="app/services/uploadServices.js"></script>
 
     <link rel="icon" type="image/png" href="/assets/images/favicon.ico">
-
-
 </head>
 
 <body ng-app="PixMapApp" ng-controller="mainCtrl as mainCtrl" ng-show="!mainCtrl.loadingData" ng-cloak>
@@ -79,23 +77,13 @@
                         <a class="nav-link" href="/login" ng-show="!mainCtrl.isLoggedIn">Login</a>
                     </li>
                     <li class="nav-item dropdown profile-dropdown" ng-show="mainCtrl.isLoggedIn">
-                        <a href="/profile" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{mainCtrl.username}}<span class="caret"></span></a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{mainCtrl.username}}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="/profile">Your profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/profileSettings">Settings</a>
                             <a class="dropdown-item" href="/logout" ng-click="mainCtrl.logout()">Logout</a>
                         </ul>
-                        <!-- <button type="button" class="btn btn-sm btn-secondary btn-outline-secondary">
-                            <a class="nav-link" href="/profile">{{mainCtrl.username}}</a>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu pull-right" >
-                            <a class="dropdown-item" href="/profileSettings">Settings</a>
-                            <a class="dropdown-item" href="/logout" ng-click="mainCtrl.logout()">Logout</a>
-                        </div> -->
                     </li>
                 </ul>
             </div>
