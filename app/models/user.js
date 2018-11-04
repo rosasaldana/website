@@ -6,9 +6,13 @@
 */
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs'),
+    gridStore = require('mongoose-gridstore'),
     Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+    displayName: {
+        type: String
+    },
     username: {
         type: String,
         required: true,
@@ -23,10 +27,15 @@ var UserSchema = new Schema({
         required: true,
         unique: true
     },
+    profilePicture: {
+        type: Schema.Types.ObjectId
+    },
     following: {
         users: [String]
     }
 });
+
+UserSchema.plugin(gridStore);
 
 //Function to authenticate password from user
 //Input is password from user and output is a boolean

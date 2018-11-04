@@ -13,3 +13,8 @@
 .dropdown-menu{
     left: -100px;
 }
+
+.responsive-image{
+    width: 80%;
+    height: auto;
+}

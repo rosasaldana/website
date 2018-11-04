@@ -42,12 +42,11 @@ var currentUser;
 
 module.exports = function(router) {
 
-
+    //Route to get images for a user
 	router.get('/getImages/:user', function(req, res) {
-
 		var imageFileIDs = [];
 		var imgFiles = [];
-		
+
 		ImagePost.find({username: req.params.user}, function(err, data) {
 			if(err) {
 				throw err;
@@ -68,10 +67,10 @@ module.exports = function(router) {
 				res.send(imgFiles);
 			})
 		});
-});
+    });
 
+    //Route to retrieve images from storage engine
 	router.get('/image/:filename', function(req, res) {
-
 		gfs.files.findOne({filename : req.params.filename}, function(err, file) {
 			if(err) {
 				console.log(err);
@@ -80,21 +79,16 @@ module.exports = function(router) {
 			const readstream = gfs.createReadStream((file.filename));
 			readstream.pipe(res);
 			}
-		
 		});
 	})
 
-
+    //Route to upload image for a given user
 	router.post('/userimages', upload.single('userImg'), function(req, res) {
-
-
-		 var imagePost = new ImagePost();
+         var imagePost = new ImagePost();
 		 imagePost.imgTitle = req.body.imgTitle;
 		 imagePost.imgDescription = req.body.imgDescription;
 		 imagePost.imgRef = req.file.id;
 		 imagePost.username = req.body.username;
-
-
 
 		imagePost.save(function(err) {
 			if(err) {
@@ -107,6 +101,55 @@ module.exports = function(router) {
 		res.redirect('/profile');
 	});
 
+    //Route to upload a profile picture for a given user
+    router.post('/uploadProfilePic', upload.single('profilePic'), function(req, res){
+        if(req.file){
+            User.findOne({username: req.body.user}, function(err, user){
+                if(err) throw err;
+
+                if(user){
+                    user.profilePicture = req.file.id;
+                    user.save(function(err){
+                        if(err){
+                            res.json({
+                                success: false,
+                                message: "Error uploading profile picture"
+                            });
+                        }
+                        else{
+                            res.redirect('/profileSettings');
+                        }
+                    });
+                }
+                else{
+                    res.json({
+                        success: false,
+                        message: "Unable to find user"
+                    });
+                }
+            });
+        }
+        else{
+            res.redirect('/profileSettings');
+        }
+    });
+
+    //Route to retrieve profile picture for a given user
+    router.get('/getProfilePic', function(req, res){
+        User.findOne({username: req.body.username}, function(err, user){
+            if(err) throw err;
+
+            if(user.profilePicture == null){
+                res.json({
+                    success: false,
+                    message: "Profile picture does not exist"
+                });
+            }
+            else{
+
+            }
+        });
+    });
 
 	return router;
 }

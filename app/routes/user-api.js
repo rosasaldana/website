@@ -19,7 +19,7 @@ module.exports = function(router) {
             if(err) return next(err);
             user.password = hash;
         });
-        
+
         if (req.body.username == null || req.body.username == '' || req.body.password == null || req.body.password == '' || req.body.email == null || req.body.email == '') {
             res.json({
                 success: false,
@@ -80,6 +80,20 @@ module.exports = function(router) {
                     token: token
                 });
             }
+        });
+    });
+
+    //Route to obatin all user information
+    //http://<url>/user-api/getUserInfo
+    router.get('/getUserInfo/:user', function(req, res){
+        User.findOne({username: req.params.user}, function(err, data){
+            if(err) throw err;
+
+            if(data) res.send(data);
+            else res.json({
+                success: false,
+                message: "User does not exist"
+            });
         });
     });
 
