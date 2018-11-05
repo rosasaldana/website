@@ -28,7 +28,7 @@ var UserSchema = new Schema({
         unique: true
     },
     profilePicture: {
-        type: Schema.Types.ObjectId
+        type: String
     },
     following: {
         users: [String]

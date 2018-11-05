@@ -108,7 +108,8 @@ module.exports = function(router) {
                 if(err) throw err;
 
                 if(user){
-                    user.profilePicture = req.file.id;
+                    user.profilePicture = req.file.filename;
+                    console.log(req.file);
                     user.save(function(err){
                         if(err){
                             res.json({
@@ -134,19 +135,20 @@ module.exports = function(router) {
         }
     });
 
-    //Route to retrieve profile picture for a given user
-    router.get('/getProfilePic', function(req, res){
-        User.findOne({username: req.body.username}, function(err, user){
+    router.get('/getProfilePic/:filename', function(req, res){
+        console.log(req.params.filename);
+        gfs.files.findOne({filename : req.params.filename}, function(err, file){
             if(err) throw err;
 
-            if(user.profilePicture == null){
-                res.json({
-                    success: false,
-                    message: "Profile picture does not exist"
-                });
+            if(file != null){
+                var readstream = gfs.createReadStream((file.filename));
+                readstream.pipe(res);
             }
             else{
-
+                res.json({
+                    success: false,
+                    message: "Unable to find file"
+                });
             }
         });
     });

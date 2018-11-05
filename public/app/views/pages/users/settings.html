@@ -11,10 +11,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td ng-click="settingsCtrl.displayPage(0)">Profile</td>
+                        <td ng-click="settingsCtrl.togglePageDisplay(0)">Profile</td>
                     </tr>
                     <tr>
-                        <td ng-click="settingsCtrl.displayPage(1)">Account</td>
+                        <td ng-click="settingsCtrl.togglePageDisplay(1)">Account</td>
                     </tr>
                 </tbody>
             </table>
@@ -22,7 +22,7 @@
         <!-- End of table  -->
 
         <!-- Public profile settings -->
-        <div class="col" ng-show="settingsCtrl.display[0]">
+        <div class="col" ng-show="settingsCtrl.displayPage[0]">
             <h3>Public Profile</h3>
             <hr>
 
@@ -30,20 +30,21 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="inputName">Name</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="{{settingsCtrl.displayName}}">
+                        <input type="text" class="form-control" id="inputName" placeholder="{{settingsCtrl.displayName}}" ng-model="profileData.displayName">
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">Email</label>
-                        <input type="text" class="form-control" id="inputEmail" placeholder="{{settingsCtrl.displayEmail}}">
+                        <input type="text" class="form-control" id="inputEmail" placeholder="{{settingsCtrl.displayEmail}}" ng-model="profileData.email">
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <h6>Profile Picture</h6>
                     <br>
-                    <div class="avatar-circle" id="avatar" ng-show="settingsCtrl.showAvatar">
+                    <div class="avatar-circle" id="avatar" ng-show="settingsCtrl.imageDisplay[1]">
                         <span class="avatar-initials" id="avatar-text">{{settingsCtrl.avatarText}}</span>
                     </div>
-                    <img id="previewProfilePic" class="responsive-image" style="min-width: 100px; max-width: 250px;" >
+                    <img id="previewProfilePic" class="responsive-image" ng-show="settingsCtrl.imageDisplay[2]" >
+                    <img src="/profile-api/image/{{settingsCtrl.profilePicture}}" class="responsive-image" ng-show="settingsCtrl.imageDisplay[0]">
                     <br>
                     <br>
                     <form action="/profile-api/uploadProfilePic" method="POST" enctype="multipart/form-data" id="submission-form">
@@ -56,14 +57,14 @@
 
             <hr>
             <br>
-            <input type="submit" value="Update Profile" class="btn btn-success btn-md" form="submission-form">
+            <input type="submit" value="Update Profile" class="btn btn-success btn-md" form="submission-form" ng-click="settingsCtrl.updateProfile(profileData)">
             <br>
             <br>
         </div>
         <!-- End of public profile settings -->
 
         <!-- Account settings -->
-        <div class="col-sm-9" ng-show="settingsCtrl.display[1]">
+        <div class="col-sm-9" ng-show="settingsCtrl.displayPage[1]">
             <h3>Change Password</h3>
             <hr>
             <div class="form-group">

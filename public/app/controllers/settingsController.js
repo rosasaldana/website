@@ -25,8 +25,13 @@ angular.module('settingsController', ['userServices'])
         var profilePic = document.getElementById('previewProfilePic');
         var avatarStyle = document.getElementById('avatar');
 
-        settings.display = [true, false];   //[profile page, account page]; used to control what gets displayed on screen
-        settings.showAvatar = true;
+        //Array to control which page is being displayed
+        // [ profile settings page, account setting page]
+        settings.displayPage = [true, false];
+
+        //Array to control which is image is displayed
+        // [ profile picture, avatar image, preview picture ]
+        settings.imageDisplay = [false, false, false];
 
         $scope.$on('$viewContentLoaded', function(){
             User.getUser().then(function(response){
@@ -35,25 +40,44 @@ angular.module('settingsController', ['userServices'])
                 User.getUserInfo(settings.username).then(function(userInfo){
                     settings.displayName = userInfo.data.displayName;
                     settings.displayEmail = userInfo.data.email;
+                    settings.profilePicture = userInfo.data.profilePicture;
                     if(settings.displayName == null || settings.displayName == ""){
                         settings.displayName = userInfo.data.username;
                     }
+
+                    if(settings.profilePicture == null || settings.profilePicture == ""){
+                        settings.avatarText = settings.username[0].toUpperCase();
+                        avatarStyle.setAttribute("style", "background-color: " + User.getAvatarColor(settings.avatarText) + ";");
+                        settings.togglePictureDisplay(1);
+                    } else{
+                        settings.togglePictureDisplay(0);
+                    }
                 });
-                settings.avatarText = settings.username[0].toUpperCase();
-                avatarStyle.setAttribute("style", "background-color: " + User.getAvatarColor(settings.avatarText) + ";");
             });
         });
 
-        settings.displayPage = function(page){
+        settings.togglePictureDisplay = function(picture){
+            for(index in settings.imageDisplay){
+                settings.imageDisplay[index] = false;
+                if(index == picture) settings.imageDisplay[index] = true;
+            }
+        }
+
+        settings.togglePageDisplay = function(page){
             for(index in settings.display){
                 settings.display[index] = false;
                 if(index == page) settings.display[index] = true;
             }
         }
 
+        settings.updateProfile = function(profileData){
+            console.log(profileData);
+            asdfa
+        }
+
         $scope.displayPic = function(){
             $scope.$apply(function(){
-                settings.showAvatar = false;
+                settings.togglePictureDisplay(2);
             });
             profilePic.src = $scope.previewImage;
         }

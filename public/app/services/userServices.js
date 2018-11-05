@@ -73,11 +73,6 @@ angular.module('userServices', ['authServices'])
             return $http.put('/user-api/unfollowUser', unfollowUserData);
         }
 
-        //User.getProfilePic() -> function call
-        userFactory.getProfilePic = function(user){
-            return $http.get('/profile-api/getProfilePic/' + user);
-        }
-
         //User.getAvatarColor() -> function call
         userFactory.getAvatarColor = function(id){
             var map = { 1: "#0085c3", 2: "#dc5034", 3: "#009f4d", 4: "#5482ab",
