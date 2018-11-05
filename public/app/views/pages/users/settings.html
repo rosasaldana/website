@@ -1,28 +1,8 @@
 <div class="container">
     <div class="row">
 
-        <!-- Table for profile settings -->
-        <div class="col-xs-2">
-            <table class="table table-hover table-bordered text-left">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Profile Settings</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td ng-click="settingsCtrl.togglePageDisplay(0)">Profile</td>
-                    </tr>
-                    <tr>
-                        <td ng-click="settingsCtrl.togglePageDisplay(1)">Account</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- End of table  -->
-
         <!-- Public profile settings -->
-        <div class="col" ng-show="settingsCtrl.pageDisplay[0]">
+        <div class="col">
             <h3>Public Profile</h3>
             <hr>
 
@@ -37,7 +17,7 @@
                         <input type="text" class="form-control" id="inputEmail" placeholder="{{settingsCtrl.displayEmail}}" ng-model="profileData.email">
                     </div>
                     <br>
-                    <button type="button" class="btn btn-sm btn-primary" ng-click="settingsCtrl.updateProfileInfo(profileData)">Update Profile</button>
+                    <button type="button" class="btn btn-md btn-primary" ng-click="settingsCtrl.updateProfileInfo(profileData)">Update Profile</button>
                     <div class="alert alert-danger inline" ng-show="settingsCtrl.updateError">{{settingsCtrl.updateMsg}}</div>
                     <div class="alert alert-success inline" ng-show="settingsCtrl.updateSuccess">{{settingsCtrl.updateMsg}}</div>
                     <br>
@@ -49,26 +29,29 @@
                     <div class="avatar-circle" id="avatar" ng-show="settingsCtrl.imageDisplay[1]">
                         <span class="avatar-initials" id="avatar-text">{{settingsCtrl.avatarText}}</span>
                     </div>
-                    <img id="previewProfilePic" class="responsive-image" ng-show="settingsCtrl.imageDisplay[2]" >
+                    <img id="previewProfilePic" class="responsive-image" ng-show="settingsCtrl.imageDisplay[2]">
                     <img src="/profile-api/image/{{settingsCtrl.profilePicture}}" class="responsive-image" ng-show="settingsCtrl.imageDisplay[0]">
                     <br>
                     <br>
                     <form action="/profile-api/uploadProfilePic" method="POST" enctype="multipart/form-data" id="submission-form">
                         <input type="hidden" name="user" value="{{settingsCtrl.username}}">
-                        <label for="file-upload" class="btn btn-sm btn-primary" ng-show="!settingsCtrl.previewPic">Upload Picture</label>
-                        <input id="file-upload" name="profilePic" type="file" accept="image/*" imageread style="display:none;" ng-show="!settingsCtrl.previewPic"/>
+                        <label for="file-upload" class="btn btn-md btn-primary" ng-show="!settingsCtrl.previewPic">Upload Picture</label>
+                        <input id="file-upload" name="profilePic" type="file" accept="image/*" imageread style="display:none;" ng-show="!settingsCtrl.previewPic" />
                     </form>
-                    <input type="submit" value="Update Picture" class="btn btn-success btn-sm" form="submission-form" ng-show="settingsCtrl.previewPic">
-                    <button type="button" class="btn btn-sm btn-danger" ng-show="settingsCtrl.previewPic" ng-click="settingsCtrl.cancelPicUpdate()">Cancel</button>
+                    <input type="submit" value="Update Picture" class="btn btn-success btn-md" form="submission-form" ng-show="settingsCtrl.previewPic">
+                    <button type="button" class="btn btn-md btn-danger" ng-show="settingsCtrl.previewPic" ng-click="settingsCtrl.cancelPicUpdate()">Cancel</button>
                 </div>
             </div>
 
+            <br><br>
             <hr>
         </div>
-        <!-- End of public profile settings -->
+    </div>
+    <!-- End of public profile settings -->
 
-        <!-- Account settings -->
-        <div class="col-sm-9" ng-show="settingsCtrl.pageDisplay[1]">
+    <!-- Account settings -->
+    <div class="row">
+        <div class="col-sm-9">
             <h3>Change Password</h3>
             <hr>
             <div class="form-group">
@@ -93,12 +76,36 @@
             <h3 class="text-danger">Delete Account</h3>
             <hr>
             <p>Once you delete your account, there is no going back. Please be certain.</p>
-            <button type="button" class="btn btn-md btn-danger">Delete Account</button>
+            <button type="button" class="btn btn-md btn-danger" data-toggle="modal" data-target="#confirmDelete">Delete Account</button>
             <hr>
             <br>
             <br>
         </div>
-        <!-- End of account settings  -->
-
     </div>
+    <!-- End of account settings  -->
+
+    <!-- Modal to confirm deleting account -->
+    <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Once you delete your account, there is no going back. Please confirm</p>
+                    <input type="password" class="form-control" placeholder="Enter password" ng-model="deleteAccount.password">
+                    <br>
+                    <div class="show-hide-message text-center" ng-show="settingsCtrl.deleteError">
+                        <div class="alert alert-danger">{{settingsCtrl.deleteErrorMsg}}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-md" ng-click="settingsCtrl.deleteAccount(deleteAccount)">Confirm Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of modal -->
+
 </div>

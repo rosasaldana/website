@@ -88,6 +88,11 @@ angular.module('userServices', ['authServices'])
             return $http.get('/user-api/getDisplayName/' + user);
         }
 
+        //User.deleteAccount() -> function call
+        userFactory.deleteAccount = function(user){
+            return $http.put('/user-api/deleteAccount', user);
+        }
+
         //User.getAvatarColor() -> function call
         userFactory.getAvatarColor = function(id){
             var map = { 1: "#0085c3", 2: "#dc5034", 3: "#009f4d", 4: "#5482ab",

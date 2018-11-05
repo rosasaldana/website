@@ -20,16 +20,12 @@ angular.module('settingsController', ['userServices'])
         }
     }])
 
-    .controller('settingsController', function($scope, User){
+    .controller('settingsController', function($scope, $window, User){
         var settings = this;
         var profilePic = document.getElementById('previewProfilePic');
         var avatarStyle = document.getElementById('avatar');
         var form = document.getElementById('submission-form');
         settings.previewPic = false;
-
-        //Array to contorl which page is displayed
-        // [settings page, account setting page]
-        settings.pageDisplay = [true, false];
 
         //Array to control which is image is displayed
         // [ profile picture, avatar image, preview picture ]
@@ -47,7 +43,7 @@ angular.module('settingsController', ['userServices'])
                     settings.profilePicture = userInfo.data.profilePicture;
 
                     if(settings.displayName == null || settings.displayName == ""){
-                        settings.displayName = userInfo.data.username;
+                        settings.displayName = settings.username;
                     }
                     settings.avatarText = settings.displayName[0].toUpperCase();
                     avatarStyle.setAttribute("style", "background-color: " + User.getAvatarColor(settings.avatarText) + ";");
@@ -69,17 +65,10 @@ angular.module('settingsController', ['userServices'])
             }
         }
 
-        //Toggling page display between profile settings and account setting
-        settings.togglePageDisplay = function(page){
-            for(index in settings.pageDisplay){
-                settings.pageDisplay[index] = false;
-                if(index == page) settings.pageDisplay[index] = true;
-            }
-        }
-
         //Function to cancel the photo upload, and reverting back to the profile picture
         settings.cancelPicUpdate = function(){
-            settings.togglePictureDisplay(0);
+            if(settings.profilePicture) settings.togglePictureDisplay(0);
+            else settings.togglePictureDisplay(1);
             settings.previewPic = false;
             form.reset();
         }
@@ -129,6 +118,24 @@ angular.module('settingsController', ['userServices'])
                         settings.passwordSuccess = true;
                     } else{
                         settings.passwordError = true;
+                    }
+                });
+            }
+        }
+
+        //Function to delete the account
+        settings.deleteAccount = function(deleteData){
+            settings.deleteError = false;
+
+            if(deleteData){
+                deleteData.username = settings.username;
+                User.deleteAccount(deleteData).then(function(response){
+                    if(response.data.success){
+                        User.logout();
+                        $window.location.href = '/home';
+                    } else{
+                        settings.deleteError = true;
+                        settings.deleteErrorMsg = response.data.message;
                     }
                 });
             }

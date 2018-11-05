@@ -104,11 +104,17 @@ module.exports = function(router) {
             if(err) throw err;
 
             if(user){
-                res.send(user);
+                var name = (user.displayName) ? user.displayName : user.username;
+                res.json({
+                    success: true,
+                    username: user.username,
+                    displayName: name
+                });
             } else {
                 res.json({
                     success: false,
-                    message: "User does not exist"
+                    message: "User does not exist",
+                    username: req.params.user
                 });
             }
         });
@@ -251,8 +257,37 @@ module.exports = function(router) {
         });
     });
 
+    //Delete account
+    //http://<url>/user-api/deleteAccount
+    router.put('/deleteAccount', function(req, res){
+        User.findOne({username: req.body.username}, function(err, user){
+            if(err) throw err;
+
+            if(user == null){
+                res.json({
+                    success: false,
+                    message: "Could not confirm user"
+                })
+            }
+            else if(!user.comparePassword(req.body.password)){
+                res.json({
+                    success: false,
+                    message: "Could not confirm password"
+                });
+            } else{
+                User.findOneAndRemove({username: req.body.username}, function(err){
+                    if(err) throw err;
+                    res.json({
+                        success: true,
+                        message: "Successfully deleted user"
+                    });
+                });
+            }
+        });
+    });
+
     //Middleware for following a user and unfollowing a user
-    router.use(function(req, res, next){
+    router.use('/followUser', function(req, res, next){
         if(req.body.username && req.body.followingUser){
             User.findOne({username: req.body.followingUser}, function(err, followingUser){
                 if (err) throw err;
@@ -266,6 +301,7 @@ module.exports = function(router) {
             });
         }
         else{
+            console.log('here');
             req.error = "Ensure that user and the requested user are specified";
             next();
         }
@@ -322,10 +358,10 @@ module.exports = function(router) {
     //Route to unfollow a user
     //http://<url>/user-api/unfollowUser
     router.put('/unfollowUser', function(req, res){
-        if(req.error){
+        if(!req.body.username && !req.body.followingUser){
             res.json({
                 success: false,
-                message: req.error
+                message: "Ensure username and followingUser is provided"
             });
         }
         else{
@@ -333,7 +369,7 @@ module.exports = function(router) {
                 if(err) throw err;
 
                 if(user){
-                    var index = user.following.users.indexOf(req.followingUser.username);
+                    var index = user.following.users.indexOf(req.body.followingUser);
                     if(index != -1){
                         user.following.users.splice(index, 1);
                         user.save(function(err){

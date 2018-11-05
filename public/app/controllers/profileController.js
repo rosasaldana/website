@@ -193,18 +193,26 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         $scope.$on('$viewContentLoaded', function() {
 
             User.getUser().then(function(response) {
-
-                //Retrieving the current user's friends
                 profile.username = response.data.username;
 
+                //Retrieving the current user's friends
                 User.getFriends(response.data.username).then(function(response) {
                     var friends = response.data[0].following.users;
+
+                    //Retrieving display name for all friends and removing friend if they
+                    //no longer exist in the database
                     for(index in friends){
-                        User.getDisplayName(friends[index]).then(function(response){
-                            console.log(response);
-                            if(response.data.displayName) profile.friends.displayName.push(response.data.displayName);
-                            else profile.friends.displayName.push(response.data.username);
-                            profile.friends.username.push(response.data.username);
+                        User.getDisplayName(friends[index]).then(function(res){
+                            if(res.data.success){
+                                profile.friends.displayName.push(res.data.displayName);
+                                profile.friends.username.push(res.data.username);
+                            } else{
+                                var removeFriend = {
+                                    username: profile.username,
+                                    followingUser: res.data.username
+                                }
+                                User.removeFriend(removeFriend);
+                            }
                         });
                     }
                 });
@@ -212,7 +220,6 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 //Retrieving all users
                 User.getAllUsers(profile.username).then(function(response) {
                     profile.users = response.data;
-
                 });
 
                 //Retrieve current user image posts
@@ -263,6 +270,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             });
         };
 
+        //Function to check if the user follows someone to dynamically update add friend list
         profile.followsUser = function(user) {
             if (profile.friends.displayName.indexOf(user) != -1) {
                 return true;
