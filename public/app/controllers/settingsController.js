@@ -45,11 +45,12 @@ angular.module('settingsController', ['userServices'])
                     settings.displayName = userInfo.data.displayName;
                     settings.displayEmail = userInfo.data.email;
                     settings.profilePicture = userInfo.data.profilePicture;
-                    settings.avatarText = settings.username[0].toUpperCase();
-                    avatarStyle.setAttribute("style", "background-color: " + User.getAvatarColor(settings.avatarText) + ";");
+
                     if(settings.displayName == null || settings.displayName == ""){
                         settings.displayName = userInfo.data.username;
                     }
+                    settings.avatarText = settings.displayName[0].toUpperCase();
+                    avatarStyle.setAttribute("style", "background-color: " + User.getAvatarColor(settings.avatarText) + ";");
 
                     if(settings.profilePicture == null || settings.profilePicture == ""){
                         settings.togglePictureDisplay(1);
@@ -116,7 +117,7 @@ angular.module('settingsController', ['userServices'])
             settings.passwordError = settings.passwordSuccess = false;
             if(!passwordData) return;
             else if(passwordData.newPassword != passwordData.confirmPassword){
-                settings.passwordMsg = "Passwords do not match"
+                settings.passwordMsg = "Passwords do not match";
                 settings.passwordError = true;
                 return;
             }
