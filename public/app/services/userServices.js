@@ -73,6 +73,16 @@ angular.module('userServices', ['authServices'])
             return $http.put('/user-api/unfollowUser', unfollowUserData);
         }
 
+        //User.updateProfile() -> function call
+        userFactory.updateProfile = function(profileData){
+            return $http.put('/user-api/updateProfile', profileData);
+        }
+
+        //User.updatePassword() -> function call
+        userFactory.updatePassword = function(passwordData){
+            return $http.put('/user-api/updatePassword', passwordData);
+        }
+
         //User.getAvatarColor() -> function call
         userFactory.getAvatarColor = function(id){
             var map = { 1: "#0085c3", 2: "#dc5034", 3: "#009f4d", 4: "#5482ab",

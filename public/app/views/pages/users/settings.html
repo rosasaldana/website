@@ -22,7 +22,7 @@
         <!-- End of table  -->
 
         <!-- Public profile settings -->
-        <div class="col" ng-show="settingsCtrl.displayPage[0]">
+        <div class="col" ng-show="settingsCtrl.pageDisplay[0]">
             <h3>Public Profile</h3>
             <hr>
 
@@ -36,7 +36,13 @@
                         <label for="inputEmail">Email</label>
                         <input type="text" class="form-control" id="inputEmail" placeholder="{{settingsCtrl.displayEmail}}" ng-model="profileData.email">
                     </div>
+                    <br>
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="settingsCtrl.updateProfileInfo(profileData)">Update Profile</button>
+                    <div class="alert alert-danger inline" ng-show="settingsCtrl.updateError">{{settingsCtrl.updateMsg}}</div>
+                    <div class="alert alert-success inline" ng-show="settingsCtrl.updateSuccess">{{settingsCtrl.updateMsg}}</div>
+                    <br>
                 </div>
+
                 <div class="col-sm-4">
                     <h6>Profile Picture</h6>
                     <br>
@@ -49,37 +55,37 @@
                     <br>
                     <form action="/profile-api/uploadProfilePic" method="POST" enctype="multipart/form-data" id="submission-form">
                         <input type="hidden" name="user" value="{{settingsCtrl.username}}">
-                        <label for="file-upload" class="btn btn-sm btn-primary">Upload Picture</label>
-                        <input id="file-upload"name="profilePic" type="file" accept="image/*" imageread style="display:none;" />
+                        <label for="file-upload" class="btn btn-sm btn-primary" ng-show="!settingsCtrl.previewPic">Upload Picture</label>
+                        <input id="file-upload" name="profilePic" type="file" accept="image/*" imageread style="display:none;" ng-show="!settingsCtrl.previewPic"/>
                     </form>
+                    <input type="submit" value="Update Picture" class="btn btn-success btn-sm" form="submission-form" ng-show="settingsCtrl.previewPic">
+                    <button type="button" class="btn btn-sm btn-danger" ng-show="settingsCtrl.previewPic" ng-click="settingsCtrl.cancelPicUpdate()">Cancel</button>
                 </div>
             </div>
 
             <hr>
-            <br>
-            <input type="submit" value="Update Profile" class="btn btn-success btn-md" form="submission-form" ng-click="settingsCtrl.updateProfile(profileData)">
-            <br>
-            <br>
         </div>
         <!-- End of public profile settings -->
 
         <!-- Account settings -->
-        <div class="col-sm-9" ng-show="settingsCtrl.displayPage[1]">
+        <div class="col-sm-9" ng-show="settingsCtrl.pageDisplay[1]">
             <h3>Change Password</h3>
             <hr>
             <div class="form-group">
                 <label for="inputOldPassword">Old Password</label>
-                <input type="text" class="form-control" id="inputOldPassword">
+                <input type="text" class="form-control" id="inputOldPassword" ng-model="passwordData.oldPassword">
             </div>
             <div class="form-group">
                 <label for="inputNewPassword">New Password</label>
-                <input type="text" class="form-control" id="inputNewPassword">
+                <input type="text" class="form-control" id="inputNewPassword" ng-model="passwordData.newPassword">
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm New Password</label>
-                <input type="text" class="form-control" id="confirmPassword">
+                <input type="text" class="form-control" id="confirmPassword" ng-model="passwordData.confirmPassword">
             </div>
-            <button type="button" class="btn btn-md btn-primary">Update Password</button>
+            <button type="button" class="btn btn-md btn-primary" ng-click="settingsCtrl.updatePassword(passwordData)">Update Password</button>
+            <div class="alert alert-danger inline" ng-show="settingsCtrl.passwordError">{{settingsCtrl.passwordMsg}}</div>
+            <div class="alert alert-success inline" ng-show="settingsCtrl.passwordSuccess">{{settingsCtrl.passwordMsg}}</div>
             <a href="#" style="margin-left: 5px;">Forgot Password</a>
             <br>
             <br>

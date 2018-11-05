@@ -97,6 +97,83 @@ module.exports = function(router) {
         });
     });
 
+    //Route to update profile information
+    //http://<url>/user-api/updateProfile
+    router.put('/updateProfile', function(req, res){
+        var displayName = (!req.body.displayName || req.body.displayName.length == 0) ? undefined : req.body.displayName;
+        var email = (!req.body.email || req.body.email.length == 0) ? undefined : req.body.email;
+
+        if(!displayName && !email){
+            res.json({
+                success: false,
+                message: "No data was provided"
+            });
+        }
+        else{
+            User.findOne({username: req.body.username}, function(err, user){
+                if(user){
+                    user.displayName = (displayName) ? displayName : user.displayName;
+                    user.email = (email) ? email : user.email;
+                    user.save(function(err){
+                        if(err){
+                            res.json({
+                                success: false,
+                                message: "Error updating profile"
+                            });
+                        } else{
+                            res.json({
+                                success: true,
+                                message: "Successfully updated profile"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    //Route to update password
+    //http://<url>/user-api/updatePassword
+    router.put('/updatePassword', function(req, res){
+        var newPassword;
+        bcrypt.hash(req.body.newPassword, null, null, function(err, hash) {
+            if(err) return next(err);
+            newPassword = hash;
+        });
+
+        User.findOne({username: req.body.username}, function(err, user){
+            if(!user){
+                res.json({
+                    success: false,
+                    message: "User not found"
+                })
+            } else{
+                if(!user.comparePassword(req.body.oldPassword)){
+                    res.json({
+                        success: false,
+                        message: "Password authentication failed"
+                    });
+                } else{
+                    user.password = newPassword;
+                    console.log(user.password, newPassword);
+                    user.save(function(err){
+                        if(err){
+                            res.json({
+                                success: false,
+                                message: "Failed updating password"
+                            });
+                        } else{
+                            res.json({
+                                success: true,
+                                message: "Updated password"
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     //Middleware for the route /user-api/currentUser to check the status of the token
     router.use('/currentUser', function(req, res, next) {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];

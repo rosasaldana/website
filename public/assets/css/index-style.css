@@ -18,3 +18,7 @@
     width: 80%;
     height: auto;
 }
+
+.inline{
+    display: inline-block;
+}
