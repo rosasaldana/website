@@ -19,25 +19,30 @@ var app = angular.module('appRoutes', ['ngRoute'])
             .when('/register', {
                 templateUrl: 'app/views/pages/users/register.html',
                 controller: 'userCtrl',
-                controllerAs: 'userCtrl'
+                controllerAs: 'userCtrl',
+                authenticated: false
             })
             .when('/login', {
                 templateUrl: 'app/views/pages/users/login.html',
                 controller: 'userCtrl',
-                controllerAs: 'userCtrl'
+                controllerAs: 'userCtrl',
+                authenticated: false
             })
             .when('/logout', {
-                templateUrl: 'app/views/pages/users/logout.html'
+                templateUrl: 'app/views/pages/users/logout.html',
+                authenticated: true
             })
             .when('/profile', {
                 templateUrl: 'app/views/pages/users/profile.html',
                 controller: 'profileCtrl',
                 controllerAs: 'profileCtrl',
+                authenticated: true
             })
             .when('/profileSettings', {
                 templateUrl: 'app/views/pages/users/settings.html',
                 controller: 'settingsController',
-                controllerAs: 'settingsCtrl'
+                controllerAs: 'settingsCtrl',
+                authenticated: true
             })
             .otherwise({
                 redirectTo: '/'
@@ -48,3 +53,23 @@ var app = angular.module('appRoutes', ['ngRoute'])
             requireBase: false
         });
     });
+
+//Preventing user from accessing the profile pages when they are not logged in
+//Preventing user from accessing login/register pages when they are logged in
+app.run(['$rootScope', '$window', 'User', function($rootScope, $window, User){
+    $rootScope.$on('$routeChangeStart', function(event, next, current){
+        if(next.$$route != undefined){
+            if(next.$$route.authenticated == true){
+                if(!User.isLoggedIn()){
+                    event.preventDefault();
+                    $window.location.href = '/home';
+                }
+            } else if(next.$$route.authenticated == false){
+                if(User.isLoggedIn()){
+                    event.preventDefault();
+                    $window.location.href = '/profile';
+                }
+            }
+        }
+    });
+}]);
