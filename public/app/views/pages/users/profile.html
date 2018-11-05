@@ -69,7 +69,7 @@
                                 <input type="text" class="form-control search-bar" placeholder="Friends" ng-model="friendSearchText" />
                             </td>
                         </tr>
-                        <tr ng-repeat="friend in profileCtrl.friends | filter: friendSearchText">
+                        <tr ng-repeat="friend in profileCtrl.friends.displayName | filter: friendSearchText">
                             <td class="text text-white">{{friend}}</td>
                             <td>
                                 <img class="del-user-img pull-right" src="assets/images/unfollow-user.png" ng-click="profileCtrl.unfollowUser(friend)" />
@@ -104,7 +104,7 @@
                     <input type="text" class="form-control" placeholder="Search" ng-model="userSearchText" />
                     <table class="table top-margin">
                         <tbody>
-                            <tr ng-repeat="user in profileCtrl.users | filter: userSearchText">
+                            <tr ng-repeat="user in profileCtrl.users.displayName | filter: userSearchText">
                                 <td>Insert Profile Pic</td>
                                 <td>{{user}}</td>
                                 <td ng-show="!profileCtrl.followsUser(user)">

@@ -97,6 +97,23 @@ module.exports = function(router) {
         });
     });
 
+    //Route to obtain display name
+    //http://<url>/user-api/getDisplayName
+    router.get('/getDisplayName/:user', function(req, res){
+        User.findOne({username: req.params.user}, '-_id username displayName', function(err, user){
+            if(err) throw err;
+
+            if(user){
+                res.send(user);
+            } else {
+                res.json({
+                    success: false,
+                    message: "User does not exist"
+                });
+            }
+        });
+    });
+
     //Route to update profile information
     //http://<url>/user-api/updateProfile
     router.put('/updateProfile', function(req, res){
@@ -207,13 +224,18 @@ module.exports = function(router) {
     //Retrieving all users except current user
     //http://<url>/user-api/getAllUsers
     router.get('/getAllUsers/:currentUser', function(req, res){
-        var allUsers = [];
+        var allUsers = {
+            username: [],
+            displayName: []
+        };
 
-        User.find({}, '-_id username', function(err, users){
+        User.find({}, '-_id username displayName', function(err, users){
             if(err) throw err;
             for(index in users){
                 if(users[index].username != req.params.currentUser){
-                    allUsers.push(users[index].username);
+                    if(users[index].displayName) allUsers.displayName.push(users[index].displayName);
+                    else allUsers.displayName.push(users[index].username);
+                    allUsers.username.push(users[index].username);
                 }
             }
             res.send(allUsers);

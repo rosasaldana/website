@@ -184,8 +184,11 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
     .controller('profileCtrl', function($scope, Locations, User, ImagePosts) {
         var profile = this;
         profile.username = $scope.username;
-        profile.friends = [];
         profile.imageposts = [];
+        profile.friends = {
+            username: [],
+            displayName: []
+        };
 
         $scope.$on('$viewContentLoaded', function() {
 
@@ -195,7 +198,15 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 profile.username = response.data.username;
 
                 User.getFriends(response.data.username).then(function(response) {
-                    profile.friends = response.data[0].following.users;
+                    var friends = response.data[0].following.users;
+                    for(index in friends){
+                        User.getDisplayName(friends[index]).then(function(response){
+                            console.log(response);
+                            if(response.data.displayName) profile.friends.displayName.push(response.data.displayName);
+                            else profile.friends.displayName.push(response.data.username);
+                            profile.friends.username.push(response.data.username);
+                        });
+                    }
                 });
 
                 //Retrieving all users
@@ -219,14 +230,16 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
 
         //Adding a friend for current user
         profile.followUser = function(user) {
+            var username = profile.users.username[profile.users.displayName.indexOf(user)];
             var followUserRequest = {
                 username: profile.username,
-                followingUser: user
+                followingUser: username
             };
 
             User.addFriend(followUserRequest).then(function(response) {
                 if (response.data.success == true) {
-                    profile.friends.push(user);
+                    profile.friends.displayName.push(user);
+                    profile.friends.username.push(username);
                 } else {
                     profile.errorMsg = response.data.message;
                 }
@@ -235,21 +248,23 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
 
         //Unfollowing a friend from the friends list
         profile.unfollowUser = function(user) {
+            var username = profile.users.username[profile.users.displayName.indexOf(user)];
             var unfollowUserRequest = {
                 username: profile.username,
-                followingUser: user
+                followingUser: username
             };
 
             User.removeFriend(unfollowUserRequest).then(function(response) {
                 if (response.data.success == true) {
-                    var index = profile.friends.indexOf(user);
-                    profile.friends.splice(index, 1);
+                    var index = profile.friends.displayName.indexOf(user);
+                    profile.friends.displayName.splice(index, 1);
+                    profile.friends.username.splice(index, 1);
                 }
             });
         };
 
         profile.followsUser = function(user) {
-            if (profile.friends.indexOf(user) != -1) {
+            if (profile.friends.displayName.indexOf(user) != -1) {
                 return true;
             } else {
                 return false;

@@ -83,6 +83,11 @@ angular.module('userServices', ['authServices'])
             return $http.put('/user-api/updatePassword', passwordData);
         }
 
+        //User.getDisplayName() -> function call
+        userFactory.getDisplayName = function(user){
+            return $http.get('/user-api/getDisplayName/' + user);
+        }
+
         //User.getAvatarColor() -> function call
         userFactory.getAvatarColor = function(id){
             var map = { 1: "#0085c3", 2: "#dc5034", 3: "#009f4d", 4: "#5482ab",
