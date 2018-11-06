@@ -48,6 +48,7 @@
     <script src="app/controllers/aboutController.js"></script>
     <script src="app/controllers/contactController.js"></script>
     <script src="app/controllers/settingsController.js"></script>
+    <script src="app/controllers/emailController.js"></script>
 
     <!-- Angular Services  -->
     <script src="app/services/userServices.js"></script>
@@ -76,7 +77,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/login" ng-show="!mainCtrl.isLoggedIn">Login</a>
                     </li>
-                    <li class="nav-item dropdown profile-dropdown" ng-show="mainCtrl.isLoggedIn">
+                    <li class="nav-item dropdown profile-dropdown" ng-show="true">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{mainCtrl.username}}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="/profile">Your profile</a>

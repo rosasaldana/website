@@ -54,6 +54,15 @@ var usernameValidator = [
 ];
 
 var UserSchema = new Schema({
+    active: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    temporaryToken: {
+        type: String,
+        required: true
+    },
     displayName: {
         type: String,
         validate: nameValidator

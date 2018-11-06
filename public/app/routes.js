@@ -44,6 +44,11 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controllerAs: 'settingsCtrl',
                 authenticated: true
             })
+            .when('/activate/:token', {
+                templateUrl: 'app/views/pages/users/activate.html',
+                controller: 'emailController',
+                controllerAs: 'emailCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });

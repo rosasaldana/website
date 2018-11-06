@@ -48,6 +48,16 @@ angular.module('userServices', ['authServices'])
             }
         }
 
+        //User.checkEmail -> funciton call
+        userFactory.checkEmail = function(data){
+            return $http.post('/user-api/checkemail', data);
+        }
+
+        //User.activeAccount -> function call
+        userFactory.activeAccount = function(token){
+            return $http.put('/user-api/activate/' + token);
+        }
+
         //User.getUserInfo() -> function call
         userFactory.getUserInfo = function(user){
             return $http.get('/user-api/getUserInfo/' + user);

@@ -33,10 +33,12 @@ angular.module('userController', ['userServices'])
         //This funciton is called in login.html
         user.logIn = function(loginData) {
             user.successMsg = user.errorMsg = false;
+            user.activationLink = false;
             user.loading = true;
 
             User.loginUser(user.loginData).then(function(data) {
                 user.loading = false;
+                // if(data.data.expired) user.activationLink = true;
                 if (data.data.success) {
                     user.successMsg = data.data.message;
 
