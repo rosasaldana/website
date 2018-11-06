@@ -16,7 +16,7 @@ angular.module('PixMapApp',
     'contactServices',
     'uploadServices',
     'settingsController',
-    'emailController'])
+    'activationController'])
 
     .config(function($httpProvider) {
         $httpProvider.interceptors.push('AuthInterceptors');

@@ -1,0 +1,29 @@
+<div class="container">
+
+    <div class="page-header">
+        <h1>Resend Activation Link</h1>
+    </div>
+    <hr>
+
+    <form ng-submit="resendCtrl.resendLink(data)">
+        <label>Username:</label>
+        <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="data.username">
+        <br>
+
+        <label>Password:</label>
+        <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="data.password">
+        <br>
+
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <br>
+
+    <div class="row show-hide-message" ng-show="resendCtrl.successMsg">
+        <div class="alert alert-success">{{resendCtrl.successMsg}}</div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="resendCtrl.errorMsg">
+        <div class="alert alert-danger">{{resendCtrl.errorMsg}}</div>
+    </div>
+
+</div>

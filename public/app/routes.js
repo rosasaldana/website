@@ -45,9 +45,14 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 authenticated: true
             })
             .when('/activate/:token', {
-                templateUrl: 'app/views/pages/users/activate.html',
+                templateUrl: 'app/views/pages/userActivation/activate.html',
                 controller: 'emailController',
                 controllerAs: 'emailCtrl'
+            })
+            .when('/resend', {
+                templateUrl: 'app/views/pages/userActivation/resend.html',
+                controller: 'resendController',
+                controllerAs: 'resendCtrl'
             })
             .otherwise({
                 redirectTo: '/'

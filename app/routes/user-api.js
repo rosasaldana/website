@@ -57,7 +57,7 @@ module.exports = function(router) {
                 } else {
                     const mailOptions = {
                         from: 'pixmapteam@gmail.com', // sender address
-                        to: 'dougaguerra@gmail.com', // list of receivers
+                        to: user.email, // list of receivers
                         subject: 'PixMap: Authenticate Account', // Subject line
                         text:'Hello '+ user.username + 'Thank you for registering at PixMap. Please ' +
                         'click on the link below to compelete your activation:"http://localhost:8080/activate/' + user.temporaryToken,
@@ -86,12 +86,12 @@ module.exports = function(router) {
 
             jwt.verify(token, secret, function(err, decoded) {
                 if (err) {
-                    res.json({
+                    res.send({
                         success: false,
                         message: 'Activation link has expired.'
                     });
                 } else if(!user) {
-                    res.json({
+                    res.send({
                         success: false,
                         message: 'Activation link has expired.'
                     });
@@ -103,18 +103,19 @@ module.exports = function(router) {
                         else{
                             const mailOptions = {
                                 from: 'pixmapteam@gmail.com', // sender address
-                                to: 'dougaguerra@gmail.com', // list of receivers
+                                to: user.email, // list of receivers
                                 subject: 'PixMap: Authenticate Account', // Subject line
                                 text:'Hello '+ user.username + ' Your account has been activated',
                                 html: 'Hello<strong> '+ user.username + '</strong>, <br><br>Your account has been activated'
                             };
                             transporter.sendMail(mailOptions, function(err, info){
                                 if(err) console.log(err);
-                                else console.log(info);
-                            });
-                            res.json({
-                                success: true,
-                                message: 'Account activated'
+                                else{
+                                    res.send({
+                                        success: true,
+                                        message: 'Account activated'
+                                    });
+                                }
                             });
                         }
                     });
@@ -126,30 +127,28 @@ module.exports = function(router) {
     //User Login Routes
     //http://<url>/user-api/authenticate
     router.post('/authenticate', function(req, res) {
-        User.findOne({
-            username: req.body.username
-        }).select('email username password active').exec(function(err, user) {
+        User.findOne({username: req.body.username}).select('email username password active').exec(function(err, user) {
             if (err) throw err;
 
             if (!user) {
-                res.json({
+                res.send({
                     success: false,
                     message: "Could not authenticate user"
                 });
             }
             else if(req.body.password == null){
-                res.json({
+                res.send({
                     success: false,
                     message: "Password not entered"
                 });
             }
             else if(!user.comparePassword(req.body.password)) {
-                res.json({
+                res.send({
                     success: false,
                     message: "Could not authenticate password"
                 });
             } else if(!user.active){
-                res.json({
+                res.send({
                     success: false,
                     expired: true,
                     message: "Account is not yet activated. Please check your e-mail for activation link."
@@ -166,6 +165,65 @@ module.exports = function(router) {
                     success: true,
                     message: "User authenticated",
                     token: token
+                });
+            }
+        });
+    });
+
+    //Route to resend activation link
+    //http://<url>/user-api/resend
+    router.post('/resend', function(req, res) {
+        User.findOne({username: req.body.username}, function(err, user) {
+            if (err) throw err;
+
+            if (!user) {
+                res.send({
+                    success: false,
+                    message: "Could not authenticate user"
+                });
+            }
+            else if(req.body.password == null){
+                res.send({
+                    success: false,
+                    message: "Password not entered"
+                });
+            }
+            else if(!user.comparePassword(req.body.password)) {
+                res.send({
+                    success: false,
+                    message: "Could not authenticate password"
+                });
+            } else if(user.active){
+                res.send({
+                    success: false,
+                    message: "Account is already activated."
+                });
+            }
+            else {
+                console.log(user);
+                user.temporaryToken = jwt.sign({username: user.username,email: user.email}, secret, {expiresIn: '2 days'});
+                user.save(function(err){
+                    if(err) throw err;
+                    else{
+                        const mailOptions = {
+                            from: 'pixmapteam@gmail.com', // sender address
+                            to: user.email, // list of receivers
+                            subject: 'PixMap: Authentication Link Request', // Subject line
+                            text:'Hello '+ user.username + ' You recently requested a new account activation link. Please click ' +
+                            'on the following link to compete your activation: "http://localhost:8080/activate/' + user.temporaryToken,
+                            html: 'Hello<strong> '+ user.username + '</strong>, <br><br>You recently requested a new account activation link. Please click ' +
+                            'on the following link to compete your activation: <br><br><a href="http://localhost:8080/activate/' + user.temporaryToken + '">http://localhost:8080</a>'
+                        };
+                        transporter.sendMail(mailOptions, function(err, info){
+                            if(err) console.log(err);
+                            else {
+                                res.json({
+                                    success: true,
+                                    message: "Activation link was sent. Please check your email"
+                                });
+                            }
+                        });
+                    }
                 });
             }
         });
