@@ -10,6 +10,15 @@
     min-height: calc(100vh - 170px);
 }
 
-footer{
-    margin-top: 20px;
+.dropdown-menu{
+    left: -100px;
+}
+
+.responsive-image{
+    width: 80%;
+    height: auto;
+}
+
+.inline{
+    display: inline-block;
 }

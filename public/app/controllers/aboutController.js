@@ -7,7 +7,7 @@ angular.module('aboutController', [])
 
         app.scrollDown = function(){
            	$('html,body').animate({
-			scrollTop: $("#about-team").offset().top -65
+			scrollTop: $("#about-team").offset().top -45
 			}, 'slow');
         }
     });

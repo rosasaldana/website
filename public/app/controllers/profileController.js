@@ -160,20 +160,21 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         };
     })
 
-    .directive("fileread", [function () {
+    .directive("fileread", [function() {
         return {
             scope: {
                 fileread: "="
             },
-            link: function (scope, element, attributes) {
-                element.bind("change", function (changeEvent) {
+            link: function(scope, element, attributes) {
+                element.bind("change", function(changeEvent) {
                     var reader = new FileReader();
-                    reader.onload = function (loadEvent) {
-                        scope.$apply(function () {
+                    scope.file = changeEvent.target.files[0];
+                    reader.onload = function(loadEvent) {
+                        scope.$apply(function() {
                             scope.fileread = loadEvent.target.result;
                         });
                     }
-                    reader.readAsDataURL(changeEvent.target.files[0]);
+                    reader.readAsDataURL(scope.file);
                 });
             }
         }
@@ -183,31 +184,48 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
     .controller('profileCtrl', function($scope, Locations, User, ImagePosts) {
         var profile = this;
         profile.username = $scope.username;
-        profile.friends = [];
         profile.imageposts = [];
+        profile.friends = {
+            username: [],
+            displayName: []
+        };
 
-        $scope.$on('$viewContentLoaded', function(){
+        $scope.$on('$viewContentLoaded', function() {
 
-            User.getUser().then(function(response){
-
-                //Retrieving the current user's friends
+            User.getUser().then(function(response) {
                 profile.username = response.data.username;
 
-                User.getFriends(response.data.username).then(function(response){
-                    profile.friends = response.data[0].following.users;
+                //Retrieving the current user's friends
+                User.getFriends(response.data.username).then(function(response) {
+                    var friends = response.data[0].following.users;
+
+                    //Retrieving display name for all friends and removing friend if they
+                    //no longer exist in the database
+                    for(index in friends){
+                        User.getDisplayName(friends[index]).then(function(res){
+                            if(res.data.success){
+                                profile.friends.displayName.push(res.data.displayName);
+                                profile.friends.username.push(res.data.username);
+                            } else{
+                                var removeFriend = {
+                                    username: profile.username,
+                                    followingUser: res.data.username
+                                }
+                                User.removeFriend(removeFriend);
+                            }
+                        });
+                    }
                 });
 
                 //Retrieving all users
-                User.getAllUsers(profile.username).then(function(response){
+                User.getAllUsers(profile.username).then(function(response) {
                     profile.users = response.data;
-
                 });
 
                 //Retrieve current user image posts
                 ImagePosts.getPhotos(profile.username).then(function(response) {
-                profile.imageposts = response.data;
-                console.log(response.data);
-            });
+                    profile.imageposts = response.data;
+                });
             });
 
             //Retreiving the photo locations from the server
@@ -215,47 +233,48 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             Locations.getLocations().then(function(data) {
                 $scope.geojson = data.data;
             });
-
-
         });
 
         //Adding a friend for current user
-        profile.followUser = function(user){
+        profile.followUser = function(user) {
+            var username = profile.users.username[profile.users.displayName.indexOf(user)];
             var followUserRequest = {
                 username: profile.username,
-                followingUser: user
+                followingUser: username
             };
 
-            User.addFriend(followUserRequest).then(function(response){
-                if(response.data.success == true){
-                    profile.friends.push(user);
-                }
-                else{
+            User.addFriend(followUserRequest).then(function(response) {
+                if (response.data.success == true) {
+                    profile.friends.displayName.push(user);
+                    profile.friends.username.push(username);
+                } else {
                     profile.errorMsg = response.data.message;
                 }
             });
         };
 
         //Unfollowing a friend from the friends list
-        profile.unfollowUser = function(user){
+        profile.unfollowUser = function(user) {
+            var username = profile.users.username[profile.users.displayName.indexOf(user)];
             var unfollowUserRequest = {
                 username: profile.username,
-                followingUser: user
+                followingUser: username
             };
 
-            User.removeFriend(unfollowUserRequest).then(function(response){
-                if(response.data.success == true){
-                    var index = profile.friends.indexOf(user);
-                    profile.friends.splice(index, 1);
+            User.removeFriend(unfollowUserRequest).then(function(response) {
+                if (response.data.success == true) {
+                    var index = profile.friends.displayName.indexOf(user);
+                    profile.friends.displayName.splice(index, 1);
+                    profile.friends.username.splice(index, 1);
                 }
             });
         };
 
-        profile.followsUser = function(user){
-            if(profile.friends.indexOf(user) != -1){
+        //Function to check if the user follows someone to dynamically update add friend list
+        profile.followsUser = function(user) {
+            if (profile.friends.displayName.indexOf(user) != -1) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         }

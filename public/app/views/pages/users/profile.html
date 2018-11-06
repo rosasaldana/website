@@ -1,47 +1,47 @@
 <div class="container-fluid" style="min-height: 100vh">
 
-
-        <div class="row">
-            <div class="col-sm-12">
-                <button class="btn btn-primary" id="upload-button" data-toggle="modal" data-target="#upload-form">+Upload Photo</button>
-            </div>
-            <div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
+    <!-- Uploading photo -->
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-primary" id="upload-button" data-toggle="modal" data-target="#upload-form">+Upload Photo</button>
+        </div>
+        <div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Upload Photo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="submission-form" >
-                      <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Title</label>
-                        <input type="text" class="form-control" name="imgTitle" ng-model="profileCtrl.imgTitle">
-                      </div>
-                      <div class="form-group">
-                        <label for="message-text" class="col-form-label">Description</label>
-                        <textarea class="form-control" name="imgDescription" ng-model="profileCtrl.imgDescription"></textarea>
-                      </div>
-                      <div class="form-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="userImg" aria-describedby="userImg">
-                            <label class="custom-file-label" for="userImg">Choose photo</label>
-                        </div>
-                      </div>
-                      <input type="hidden" name="username" value="{{profileCtrl.username}}">
-                      </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form">
-                  </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upload Photo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="submission-form">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Title</label>
+                                <input type="text" class="form-control" name="imgTitle" ng-model="profileCtrl.imgTitle">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Description</label>
+                                <textarea class="form-control" name="imgDescription" ng-model="profileCtrl.imgDescription"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="userImg" aria-describedby="userImg">
+                                    <label class="custom-file-label" for="userImg">Choose photo</label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="username" value="{{profileCtrl.username}}">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form">
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
-<!--         action="/profile-api/profile" method="POST" -->
+    </div>
+
     <!-- Mapbox display -->
     <div class="MapboxApi">
         <div mapbox></div>
@@ -69,7 +69,7 @@
                                 <input type="text" class="form-control search-bar" placeholder="Friends" ng-model="friendSearchText" />
                             </td>
                         </tr>
-                        <tr ng-repeat="friend in profileCtrl.friends | filter: friendSearchText">
+                        <tr ng-repeat="friend in profileCtrl.friends.displayName | filter: friendSearchText">
                             <td class="text text-white">{{friend}}</td>
                             <td>
                                 <img class="del-user-img pull-right" src="assets/images/unfollow-user.png" ng-click="profileCtrl.unfollowUser(friend)" />
@@ -98,13 +98,13 @@
                 </div>
 
                 <!-- Modal Body  -->
-                <div class="modal-body">
+                <div class="modal-body allusers-modal-body">
 
                     <!-- Displaying all users -->
                     <input type="text" class="form-control" placeholder="Search" ng-model="userSearchText" />
                     <table class="table top-margin">
                         <tbody>
-                            <tr ng-repeat="user in profileCtrl.users | filter: userSearchText">
+                            <tr ng-repeat="user in profileCtrl.users.displayName | filter: userSearchText">
                                 <td>Insert Profile Pic</td>
                                 <td>{{user}}</td>
                                 <td ng-show="!profileCtrl.followsUser(user)">
