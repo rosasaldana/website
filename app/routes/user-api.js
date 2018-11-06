@@ -28,9 +28,20 @@ module.exports = function(router) {
         } else {
             user.save(function(err) {
                 if (err) {
+                    var message;
+                    console.log(err);
+                    if(err.errors != null){
+                        if(err.errors.displayName) message = err.errors.displayName.message;
+                        else if(err.errors.email) message = err.errors.email.message;
+                        else if(err.errors.username) message = err.errors.username.message;
+                        else message = err;
+                    } else{
+                        console.log(err);
+                        message = "Username or E-mail already exists";
+                    }
                     res.json({
                         success: false,
-                        message: 'Username or Email already exists!' + err
+                        message: message
                     });
                 } else {
                     res.send({
