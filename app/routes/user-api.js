@@ -19,7 +19,7 @@ module.exports = function(router) {
             if(err) return next(err);
             user.password = hash;
         });
-        
+
         if (req.body.username == null || req.body.username == '' || req.body.password == null || req.body.password == '' || req.body.email == null || req.body.email == '') {
             res.json({
                 success: false,
@@ -83,6 +83,120 @@ module.exports = function(router) {
         });
     });
 
+    //Route to obatin all user information
+    //http://<url>/user-api/getUserInfo
+    router.get('/getUserInfo/:user', function(req, res){
+        User.findOne({username: req.params.user}, function(err, data){
+            if(err) throw err;
+
+            if(data) res.send(data);
+            else res.json({
+                success: false,
+                message: "User does not exist"
+            });
+        });
+    });
+
+    //Route to obtain display name
+    //http://<url>/user-api/getDisplayName
+    router.get('/getDisplayName/:user', function(req, res){
+        User.findOne({username: req.params.user}, '-_id username displayName', function(err, user){
+            if(err) throw err;
+
+            if(user){
+                var name = (user.displayName) ? user.displayName : user.username;
+                res.json({
+                    success: true,
+                    username: user.username,
+                    displayName: name
+                });
+            } else {
+                res.json({
+                    success: false,
+                    message: "User does not exist",
+                    username: req.params.user
+                });
+            }
+        });
+    });
+
+    //Route to update profile information
+    //http://<url>/user-api/updateProfile
+    router.put('/updateProfile', function(req, res){
+        var displayName = (!req.body.displayName || req.body.displayName.length == 0) ? undefined : req.body.displayName;
+        var email = (!req.body.email || req.body.email.length == 0) ? undefined : req.body.email;
+
+        if(!displayName && !email){
+            res.json({
+                success: false,
+                message: "No data was provided"
+            });
+        }
+        else{
+            User.findOne({username: req.body.username}, function(err, user){
+                if(user){
+                    user.displayName = (displayName) ? displayName : user.displayName;
+                    user.email = (email) ? email : user.email;
+                    user.save(function(err){
+                        if(err){
+                            res.json({
+                                success: false,
+                                message: "Error updating profile"
+                            });
+                        } else{
+                            res.json({
+                                success: true,
+                                message: "Successfully updated profile"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    //Route to update password
+    //http://<url>/user-api/updatePassword
+    router.put('/updatePassword', function(req, res){
+        var newPassword;
+        bcrypt.hash(req.body.newPassword, null, null, function(err, hash) {
+            if(err) return next(err);
+            newPassword = hash;
+        });
+
+        User.findOne({username: req.body.username}, function(err, user){
+            if(!user){
+                res.json({
+                    success: false,
+                    message: "User not found"
+                })
+            } else{
+                if(!user.comparePassword(req.body.oldPassword)){
+                    res.json({
+                        success: false,
+                        message: "Password authentication failed"
+                    });
+                } else{
+                    user.password = newPassword;
+                    console.log(user.password, newPassword);
+                    user.save(function(err){
+                        if(err){
+                            res.json({
+                                success: false,
+                                message: "Failed updating password"
+                            });
+                        } else{
+                            res.json({
+                                success: true,
+                                message: "Updated password"
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     //Middleware for the route /user-api/currentUser to check the status of the token
     router.use('/currentUser', function(req, res, next) {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
@@ -116,13 +230,18 @@ module.exports = function(router) {
     //Retrieving all users except current user
     //http://<url>/user-api/getAllUsers
     router.get('/getAllUsers/:currentUser', function(req, res){
-        var allUsers = [];
+        var allUsers = {
+            username: [],
+            displayName: []
+        };
 
-        User.find({}, '-_id username', function(err, users){
+        User.find({}, '-_id username displayName', function(err, users){
             if(err) throw err;
             for(index in users){
                 if(users[index].username != req.params.currentUser){
-                    allUsers.push(users[index].username);
+                    if(users[index].displayName) allUsers.displayName.push(users[index].displayName);
+                    else allUsers.displayName.push(users[index].username);
+                    allUsers.username.push(users[index].username);
                 }
             }
             res.send(allUsers);
@@ -138,8 +257,37 @@ module.exports = function(router) {
         });
     });
 
+    //Delete account
+    //http://<url>/user-api/deleteAccount
+    router.put('/deleteAccount', function(req, res){
+        User.findOne({username: req.body.username}, function(err, user){
+            if(err) throw err;
+
+            if(user == null){
+                res.json({
+                    success: false,
+                    message: "Could not confirm user"
+                })
+            }
+            else if(!user.comparePassword(req.body.password)){
+                res.json({
+                    success: false,
+                    message: "Could not confirm password"
+                });
+            } else{
+                User.findOneAndRemove({username: req.body.username}, function(err){
+                    if(err) throw err;
+                    res.json({
+                        success: true,
+                        message: "Successfully deleted user"
+                    });
+                });
+            }
+        });
+    });
+
     //Middleware for following a user and unfollowing a user
-    router.use(function(req, res, next){
+    router.use('/followUser', function(req, res, next){
         if(req.body.username && req.body.followingUser){
             User.findOne({username: req.body.followingUser}, function(err, followingUser){
                 if (err) throw err;
@@ -153,6 +301,7 @@ module.exports = function(router) {
             });
         }
         else{
+            console.log('here');
             req.error = "Ensure that user and the requested user are specified";
             next();
         }
@@ -209,10 +358,10 @@ module.exports = function(router) {
     //Route to unfollow a user
     //http://<url>/user-api/unfollowUser
     router.put('/unfollowUser', function(req, res){
-        if(req.error){
+        if(!req.body.username && !req.body.followingUser){
             res.json({
                 success: false,
-                message: req.error
+                message: "Ensure username and followingUser is provided"
             });
         }
         else{
@@ -220,7 +369,7 @@ module.exports = function(router) {
                 if(err) throw err;
 
                 if(user){
-                    var index = user.following.users.indexOf(req.followingUser.username);
+                    var index = user.following.users.indexOf(req.body.followingUser);
                     if(index != -1){
                         user.following.users.splice(index, 1);
                         user.save(function(err){

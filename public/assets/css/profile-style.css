@@ -53,3 +53,13 @@
 .user-uploads {
     max-height: 100px;
 }
+
+.profile-picture{
+    min-width: 100px;
+    max-width: 250px;
+}
+
+.allusers-modal-body{
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
