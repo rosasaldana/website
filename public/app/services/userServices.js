@@ -32,6 +32,11 @@ angular.module('userServices', ['authServices'])
             }
         }
 
+        // Auth.facebook(token);
+        userFactory.facebook = function(token) {
+            AuthToken.setToken(token);
+        }
+
         //User.logout() -> function call
         userFactory.logout = function() {
             AuthToken.deleteToken();

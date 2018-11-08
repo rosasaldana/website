@@ -68,17 +68,8 @@ module.exports = function(router) {
                     message: "Could not authenticate password"
                 });
             } else {
-                var token = jwt.sign({
-                    username: user.username,
-                    email: user.email
-                }, secret, {
-                    expiresIn: '2 days'
-                });
-                res.send({
-                    success: true,
-                    message: "User authenticated",
-                    token: token
-                });
+                var token = jwt.sign({username: user.username, email: user.email }, secret, { expiresIn: '2 days' });
+                res.send({success: true, message: "User authenticated", token: token });
             }
         });
     });

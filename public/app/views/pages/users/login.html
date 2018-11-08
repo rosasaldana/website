@@ -13,7 +13,8 @@
         <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="userCtrl.loginData.password">
         <br>
 
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary" type="submit">Login</button>&nbsp
+        <a href = "/auth/facebook" target="_blank"><button type = "button" class = "btn btn-success">Facebook</button></a>
 
     </form>
     <br>
@@ -29,6 +30,10 @@
 
     <div class="row show-hide-message" ng-show="userCtrl.errorMsg">
         <div class="alert alert-danger">{{userCtrl.errorMsg}}</div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="facebook.errorMsg">
+        <div class="alert alert-danger">{{facebook.errorMsg}}</div>
     </div>
 
 </div>
