@@ -1,38 +1,45 @@
+<div class="register-background"></div>
 <div class="container">
+    <div class=container style= "background-color: white; border-radius: 25px; width: 400px; height: 500px; position: absolute; z-index: -2; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+    <img src="assets/images/WaterColorBackground.png" style="border-radius: 25px; width: 400px; height: 500px; position: absolute; z-index: -1; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: .2;">
+    <div class="container">
 
-    <div class="page-header">
-        <h1>User Registration</h1>
-    </div>
+        <div class="page-header">
+            <br><br><br><br><br><br><br>
+            <h1 style="text-align: center">User Registration</h1>
+            <br>
+        </div>
 
-    <form ng-submit="userCtrl.regUser(regData)">
-        <label>Email:</label>
-        <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="userCtrl.regData.email">
+        <center><form ng-submit="userCtrl.regUser(regData)" style="width: 300px; height: 50px; text-align: left">
+            <label><b>Email:</b></label>
+            <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="userCtrl.regData.email">
+            <br>
+
+            <label><b>Username:</b></label>
+            <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="userCtrl.regData.username">
+            <br>
+
+            <label><b>Password:</b></label>
+            <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="userCtrl.regData.password">
+            <br>
+
+            <center><button class="btn btn-primary" type="submit">Register</button></center>
+
+        </form></center>
         <br>
+        
+        <div class="jumbotron text-center" ng-show="userCtrl.loading">
+            <span class="glyphicon glyphicon-repeat spinner"></span>
+            <p>Loading...</p>
+        </div>
 
-        <label>Username:</label>
-        <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="userCtrl.regData.username">
-        <br>
+        <div class="row show-hide-message" ng-show="userCtrl.successMsg">
+            <div class="alert alert-success" style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);">{{userCtrl.successMsg}}</div>
+        </div>
 
-        <label>Password:</label>
-        <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="userCtrl.regData.password">
-        <br>
+        <div class="row show-hide-message" ng-show="userCtrl.errorMsg">
+            <div class="alert alert-danger" style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);">{{userCtrl.errorMsg}}</div>
+        </div>
 
-        <button class="btn btn-primary" type="submit">Register</button>
-
-    </form>
-    <br>
-
-    <div class="jumbotron text-center" ng-show="userCtrl.loading">
-        <span class="glyphicon glyphicon-repeat spinner"></span>
-        <p>Loading...</p>
     </div>
-
-    <div class="row show-hide-message" ng-show="userCtrl.successMsg">
-        <div class="alert alert-success">{{userCtrl.successMsg}}</div>
-    </div>
-
-    <div class="row show-hide-message" ng-show="userCtrl.errorMsg">
-        <div class="alert alert-danger">{{userCtrl.errorMsg}}</div>
-    </div>
-
 </div>

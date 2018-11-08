@@ -1,0 +1,12 @@
+.register-background {
+    position: fixed;
+    z-index: -3;
+    opacity: 1;
+    margin-top: -38px;
+	width: 100%;
+	min-height: 87vh;
+	padding-top: 40px;
+    background: url("/assets/images/SunsetBackground.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
