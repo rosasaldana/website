@@ -4,6 +4,7 @@
         <h1>User Login</h1>
     </div>
 
+    <hr>
     <form ng-submit="userCtrl.logIn(loginData)">
         <label>Username:</label>
         <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="userCtrl.loginData.username">
@@ -28,7 +29,12 @@
     </div>
 
     <div class="row show-hide-message" ng-show="userCtrl.errorMsg">
-        <div class="alert alert-danger">{{userCtrl.errorMsg}}</div>
+        <div class="alert alert-danger">
+            {{userCtrl.errorMsg}}
+            <a href="/resend">
+                <button type="button" class="btn btn-md btn-primary" ng-show="userCtrl.activationLink">Re-Send Activation Link</button>
+            </a>
+        </div>
     </div>
 
 </div>

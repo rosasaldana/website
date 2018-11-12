@@ -25,7 +25,8 @@ angular.module('userServices', ['authServices'])
 
         //User.isLoggedIn() -> function call
         userFactory.isLoggedIn = function() {
-            if (AuthToken.getToken()) {
+            var token = AuthToken.getToken();
+            if (token && token != "undefined") {
                 return true;
             } else {
                 return false;
@@ -46,6 +47,21 @@ angular.module('userServices', ['authServices'])
                     message: 'User has no token'
                 });
             }
+        }
+
+        //User.checkEmail -> funciton call
+        userFactory.checkEmail = function(data){
+            return $http.post('/user-api/checkemail', data);
+        }
+
+        //User.activeAccount -> function call
+        userFactory.activeAccount = function(token){
+            return $http.put('/user-api/activate/' + token);
+        }
+
+        //User.resendActivationLink -> function call
+        userFactory.resendActivationLink = function(data){
+            return $http.post('/user-api/resend', data);
         }
 
         //User.getUserInfo() -> function call
