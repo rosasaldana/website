@@ -104,7 +104,7 @@ module.exports = function(router) {
                             const mailOptions = {
                                 from: 'pixmapteam@gmail.com', // sender address
                                 to: user.email, // list of receivers
-                                subject: 'PixMap: Authenticate Account', // Subject line
+                                subject: 'PixMap: Account Authenticated', // Subject line
                                 text:'Hello '+ user.username + ' Your account has been activated',
                                 html: 'Hello<strong> '+ user.username + '</strong>, <br><br>Your account has been activated'
                             };
