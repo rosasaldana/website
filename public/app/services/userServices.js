@@ -27,9 +27,7 @@ angular.module('userServices', ['authServices'])
         userFactory.isLoggedIn = function() {
             var token = AuthToken.getToken();
             if (token && token != "undefined") {
-                $http.get('/user-api/currentUser').then(function(response){
-                    return response.data.success;
-                });
+                return true;
             } else {
                 return false;
             }
