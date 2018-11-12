@@ -11,7 +11,14 @@ var ImagePostSchema = new Schema ({
     imgDescription: String,
     imgRef: [Schema.Types.ObjectId],
     imgLocation: String,
-    username: String
+    username: String,
+    likeCount: Number,
+    heartstatus: String,
+    likes: [],
+    comments: [{
+    	user: String,
+    	message: String
+    }]
 });
 
 ImagePostSchema.plugin(gridStore);

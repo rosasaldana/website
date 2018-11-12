@@ -160,36 +160,17 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         };
     })
 
-    .directive("fileread", [function() {
-        return {
-            scope: {
-                fileread: "="
-            },
-            link: function(scope, element, attributes) {
-                element.bind("change", function(changeEvent) {
-                    var reader = new FileReader();
-                    scope.file = changeEvent.target.files[0];
-                    reader.onload = function(loadEvent) {
-                        scope.$apply(function() {
-                            scope.fileread = loadEvent.target.result;
-                        });
-                    }
-                    reader.readAsDataURL(scope.file);
-                });
-            }
-        }
-    }])
 
     //profileCtrl called in profile.html
-    .controller('profileCtrl', function($scope, Locations, User, ImagePosts) {
+    .controller('profileCtrl', function($scope, $window, Locations, User, ImagePosts) {
         var profile = this;
         profile.username = $scope.username;
-        profile.imageposts = [];
+        profile.userposts = [];
         profile.friends = {
             username: [],
             displayName: []
         };
-
+        var userComment = $scope.userComment;
         $scope.$on('$viewContentLoaded', function() {
 
             User.getUser().then(function(response) {
@@ -224,7 +205,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
 
                 //Retrieve current user image posts
                 ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.imageposts = response.data;
+                    profile.userposts = response.data;
                 });
             });
 
@@ -279,4 +260,49 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             }
         }
 
+        profile.deleteImagePost = function(postId) {
+            ImagePosts.deletePost(postId).then(function() {            
+                $window.location.href = '/profile';
+            }); 
+
+        }
+
+        profile.updateLikes = function(postId, username) {
+
+            ImagePosts.updateLikes(postId, profile.username).then(function(response) {
+               for(post in profile.userposts) {
+                    if(profile.userposts[post]._id == postId) {
+                        profile.userposts[post].likeCount = response.data.updatedLikes;
+                        profile.userposts[post].heartstatus = response.data.heartstatus;
+                    }
+               }
+            });
+        }
+
+        $scope.postComment = function(postId, username, message) {
+            ImagePosts.postComment(postId, profile.username, message).then(function(response) {
+                for(post in profile.userposts) {
+                    if(profile.userposts[post]._id == postId) {
+                     profile.userposts[post].comments = response.data.comments;
+                    }
+                }
+                $scope.profileCtrl.userComment ="";
+                return false;
+            });
+        }
+
+        profile.deleteComment = function(postId, commentId) {
+            ImagePosts.deleteComment(postId, commentId).then(function(response) {
+                // for(post in profile.userposts){
+                //     if(profile.userposts[post]._id == postId) {
+                //         for(comment in profile.userposts[post].comments) {
+                //             if(profile.userposts[post].comments[comment]._id == commentId) {
+                //                 var index = profile.userposts[post].comments.indexOf(comment);
+                //                 profile.userposts[post].comments.splice(index, 1);
+                //             }
+                //         }
+                //     }
+                // }console.log(response.data.comments);
+            }); 
+        }
     });
