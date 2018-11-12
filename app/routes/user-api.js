@@ -40,14 +40,12 @@ module.exports = function(router) {
             user.save(function(err) {
                 if (err) {
                     var message;
-                    console.log(err);
                     if(err.errors != null){
                         if(err.errors.displayName) message = err.errors.displayName.message;
                         else if(err.errors.email) message = err.errors.email.message;
                         else if(err.errors.username) message = err.errors.username.message;
                         else message = err;
                     } else{
-                        console.log(err);
                         message = "Username or E-mail already exists";
                     }
                     res.json({
@@ -65,12 +63,13 @@ module.exports = function(router) {
                         'click on the link below to compelete your activation: <br><br><a href="http://localhost:8080/activate/' + user.temporaryToken + '">http://localhost:8080</a>'
                     };
                     transporter.sendMail(mailOptions, function(err, info){
-                        if(err) console.log(err);
-                        else console.log(info);
-                    });
-                    res.send({
-                        success: true,
-                        message: "Account registered! Please check your e-mail for activation link."
+                        if(err) throw err;
+                        else{
+                            res.send({
+                                success: true,
+                                message: "Account registered! Please check your e-mail for activation link."
+                            });
+                        }
                     });
                 }
             });
@@ -109,7 +108,7 @@ module.exports = function(router) {
                                 html: 'Hello<strong> '+ user.username + '</strong>, <br><br>Your account has been activated'
                             };
                             transporter.sendMail(mailOptions, function(err, info){
-                                if(err) console.log(err);
+                                if(err) throw(err);
                                 else{
                                     res.send({
                                         success: true,
@@ -214,7 +213,7 @@ module.exports = function(router) {
                             'on the following link to compete your activation: <br><br><a href="http://localhost:8080/activate/' + user.temporaryToken + '">http://localhost:8080</a>'
                         };
                         transporter.sendMail(mailOptions, function(err, info){
-                            if(err) console.log(err);
+                            if(err) throw err;
                             else {
                                 res.json({
                                     success: true,
@@ -361,7 +360,6 @@ module.exports = function(router) {
                     });
                 } else{
                     user.password = newPassword;
-                    console.log(user.password, newPassword);
                     user.save(function(err){
                         if(err){
                             res.json({
@@ -454,7 +452,6 @@ module.exports = function(router) {
             });
         }
         else{
-            console.log('here');
             req.error = "Ensure that user and the requested user are specified";
             next();
         }
