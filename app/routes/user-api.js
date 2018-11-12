@@ -200,7 +200,6 @@ module.exports = function(router) {
                 });
             }
             else {
-                console.log(user);
                 user.temporaryToken = jwt.sign({username: user.username,email: user.email}, secret, {expiresIn: '2 days'});
                 user.save(function(err){
                     if(err) throw err;
@@ -256,7 +255,15 @@ module.exports = function(router) {
     //Verifying token route
     //http://<url>/user-api/currentUser
     router.get('/currentUser', function(req, res) {
-        res.send(req.decoded);
+        User.findOne({username: req.decoded.username}, function(err, user){
+            if(err) throw err;
+
+            if(user) res.send(req.decoded);
+            else res.json({
+                success: false,
+                message: "User does not exist"
+            })
+        });
     });
 
     //Route to obatin all user information

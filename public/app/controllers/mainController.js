@@ -19,6 +19,7 @@ angular.module('mainController', ['authServices', 'userServices'])
                     }
                     else{
                         app.isLoggedIn = false;
+                        app.logout();
                     }
                 });
             } else {
