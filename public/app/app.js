@@ -3,7 +3,20 @@
     Accessed in index.html to set the ng-app
 */
 
-angular.module('PixMapApp', ['appRoutes', 'userController', 'userServices', 'mainController', 'authServices', 'profileController', 'aboutController', 'locationServices', 'contactController', 'contactServices', 'uploadServices'])
+angular.module('PixMapApp',
+    ['appRoutes',
+    'userController',
+    'userServices',
+    'mainController',
+    'authServices',
+    'profileController',
+    'aboutController',
+    'locationServices',
+    'contactController',
+    'contactServices',
+    'uploadServices',
+    'settingsController',
+    'activationController'])
 
     .config(function($httpProvider) {
         $httpProvider.interceptors.push('AuthInterceptors');
