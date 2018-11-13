@@ -187,6 +187,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                             if(res.data.success){
                                 profile.friends.displayName.push(res.data.displayName);
                                 profile.friends.username.push(res.data.username);
+                                profile.getImagePosts(res.data.username);
                             } else{
                                 var removeFriend = {
                                     username: profile.username,
@@ -204,9 +205,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 });
 
                 //Retrieve current user image posts
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
-                });
+                profile.getImagePosts(profile.username);
             });
 
             //Retreiving the photo locations from the server
@@ -215,6 +214,15 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 $scope.geojson = data.data;
             });
         });
+
+        //Retrieving posts from a given user
+        profile.getImagePosts = function(username){
+            ImagePosts.getPhotos(username).then(function(response){
+                for(index in response.data){
+                    profile.userposts.push(response.data[index]);
+                }
+            });
+        }
 
         //Adding a friend for current user
         profile.followUser = function(user) {
@@ -261,14 +269,13 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         }
 
         profile.deleteImagePost = function(postId) {
-            ImagePosts.deletePost(postId).then(function() {            
+            ImagePosts.deletePost(postId).then(function() {
                 $window.location.href = '/profile';
-            }); 
+            });
 
         }
 
         profile.updateLikes = function(postId, username) {
-
             ImagePosts.updateLikes(postId, profile.username).then(function(response) {
                for(post in profile.userposts) {
                     if(profile.userposts[post]._id == postId) {
@@ -303,6 +310,6 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 //         }
                 //     }
                 // }console.log(response.data.comments);
-            }); 
+            });
         }
     });
