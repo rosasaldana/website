@@ -1,18 +1,21 @@
 require('dotenv').config();
 
-var express = require('express'),
-    morgan = require('morgan'),
-    mongoose = require('mongoose'),
-    bodyParser = require('body-parser'),
-    router = express.Router(),
-    userAppRoutes = require('./app/routes/user-api')(router),           //User-api routes
-    locationAppRoutes = require('./app/routes/location-api')(router),   //location-api routes
-    contactAppRoutes = require('./app/routes/contact-api')(router),     //contact-api routes
-    profileAppRoutes = require('./app/routes/profile-api')(router),     //profile-api routes
-    path = require('path'),
-    Grid = require('gridfs-stream');
-
+var express = require('express');
+var morgan = require('morgan');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var router = express.Router();
+var userAppRoutes = require('./app/routes/user-api')(router);        //User-api routes
+var locationAppRoutes = require('./app/routes/location-api')(router);   //location-api routes
+var contactAppRoutes = require('./app/routes/contact-api')(router);     //contact-api routes
+var profileAppRoutes = require('./app/routes/profile-api')(router);     //profile-api routes
+var path = require('path');
+var Grid = require('gridfs-stream');
+var passport = require('passport');
 var app = express();
+var social   = require('./app/passport/passport')(app, passport);
+
+
 var port = process.env.PORT || 8080;
 
 app.use(morgan('dev')); //To log http requests to console (helpful for debugging)

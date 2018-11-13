@@ -5,6 +5,9 @@
         <div class="col-sm-12">
             <button class="btn btn-primary" id="upload-button" data-toggle="modal" data-target="#upload-form">+Upload Photo</button>
         </div>
+        <div class="row" ng-repeat="post in profileCtrl.userposts">
+            <p></p>
+        </div>
         <div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -35,7 +38,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form">
+                        <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form" accept=".jpg,.jpeg,.png">
                     </div>
                 </div>
             </div>
@@ -50,11 +53,41 @@
     <div class="row justify-content-between profile-content">
 
         <!-- Posts -->
-        <div class="col-md-4 top-margin border border-white">
+        <div class="col-md-4 top-margin border border-white profile-posts">
             <p class="text text-white">posts go here</p>
-            <div class="row" ng-repeat="image in profileCtrl.imageposts">
-                <div class="col-md-4">
-                    <img class="user-uploads" src="profile-api/image/{{image.filename}}">
+            <div class="row" ng-repeat="post in profileCtrl.userposts">
+                <div class="col-sm-12">
+                    <div class="card mb-3">
+                        <div class="card-body" style="padding: 10px">
+                            <p class="card-text">{{post.username}}</p>
+                            <h5 class="card-title">{{post.imgTitle}}</h5>
+                        </div>
+                        <img class="card-img-top" src="profile-api/image/{{post.filename}}" alt="Card image cap">
+                        <div class="dropdown card-body card-options">
+                            <p class="card-text">{{post.imgDescription}}</p>
+                            <i class="fa fa-heart{{post.heartstatus}} fa-2x" style="margin-right: 20px; cursor: pointer" aria-hidden="true" ng-click="profileCtrl.updateLikes(this.post._id)"></i>
+                            <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
+                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;"aria-hidden="true">
+                            </i>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" ng-click="profileCtrl.deleteImagePost(this.post._id)" href="#">Delete Post <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding-bottom: 0px;">
+                           <p class="card-text">{{post.likeCount}} Likes</p>
+                        </div>
+                        <div class="card-body" style="padding-top: 10px;">
+                            <p class="card-text" ng-repeat="comment in post.comments">
+                                <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;"class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)"></i></span>
+                            </p>
+                            <hr>
+                            <form ng-submit="postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
+                                <input type="text" placeholder="Type a comment..." class="form-control" id ="comment-input" name="userComment" 
+                                ng-model="profileCtrl.userComment">
+                            </form>
+                            
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
