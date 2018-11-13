@@ -14,8 +14,9 @@
         <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="userCtrl.loginData.password">
         <br>
 
+        <button class="btn btn-primary" type="submit">Login</button>&nbsp
+        <a href = "/auth/facebook" target="_blank"><button type = "button" class = "btn btn-success">Facebook</button></a>
         <button class="btn btn-primary" type="submit">Login</button>
-
     </form>
     <br>
 
@@ -35,6 +36,10 @@
                 <button type="button" class="btn btn-md btn-primary" ng-show="userCtrl.activationLink">Re-Send Activation Link</button>
             </a>
         </div>
+    </div>
+
+    <div class="row show-hide-message" ng-show="facebook.errorMsg">
+        <div class="alert alert-danger">{{facebook.errorMsg}}</div>
     </div>
 
 </div>
