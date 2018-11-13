@@ -298,6 +298,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             });
         }
 
+
         profile.deleteComment = function(postId, commentId) {
             ImagePosts.deleteComment(postId, commentId).then(function(response) {
                 // for(post in profile.userposts){

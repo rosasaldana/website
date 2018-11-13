@@ -67,7 +67,7 @@
                             <p class="card-text">{{post.imgDescription}}</p>
                             <i class="fa fa-heart{{post.heartstatus}} fa-2x" style="margin-right: 20px; cursor: pointer" aria-hidden="true" ng-click="profileCtrl.updateLikes(this.post._id)"></i>
                             <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
-                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;"aria-hidden="true">
+                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;"aria-hidden="true" ng-show="post.username==profileCtrl.username">
                             </i>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" ng-click="profileCtrl.deleteImagePost(this.post._id)" href="#">Delete Post <i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -82,10 +82,10 @@
                             </p>
                             <hr>
                             <form ng-submit="postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
-                                <input type="text" placeholder="Type a comment..." class="form-control" id ="comment-input" name="userComment" 
+                                <input type="text" placeholder="Type a comment..." class="form-control" id ="comment-input" name="userComment"
                                 ng-model="profileCtrl.userComment">
                             </form>
-                            
+
                       </div>
                     </div>
                 </div>
