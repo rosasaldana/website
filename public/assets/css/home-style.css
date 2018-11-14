@@ -1,5 +1,46 @@
-body,
-.blurred-bg-container .content h1 {
+/* FADING OUT EFFECTS */
+.pixmap-message {
+    -webkit-animation: fadeOut 2s forwards;
+    animation: fadeOut 2s forwards;
+    -webkit-animation-delay: 5s;
+    animation-delay: 5s;
+    color: white;
+    text-align: center;
+}
+
+@-webkit-keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+/* FADING IN EFFECTS */
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 10s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+
+/* BLURRED CONTAINER */
+
+.blurred-bg-contain .content h1 {
   margin: 0;
   color: white;
   font-size: 30px;
@@ -15,7 +56,7 @@ p.line-height {
 	line-height: 2.0;
 }
 
-.blurred-bg-container {
+.blurred-bg-contain {
   background: url("/assets/images/skiing.png");
   height: 100vh; /* =h */
   margin-top: -38px;
@@ -25,7 +66,7 @@ p.line-height {
   background-size: cover;
 }
 
-.blurred-bg-container .content {
+.blurred-bg-contain .content {
   background: inherit;
   width: 60%; /* =cw */
   height: 40%; /* =ch */
@@ -38,14 +79,14 @@ p.line-height {
   overflow: hidden;
 }
 
-.blurred-bg-container .text {
+.blurred-bg-contain .text {
   padding: 16px;
   background: rgba(255, 255, 255, 0.3);
   height: 100%;
   box-sizing: border-box; /* so that padding is included in height */
 }
 
-.blurred-bg-container .blur {
+.blurred-bg-contain .blur {
   background: inherit;
   height: 100vh; /* h */
   width: 166.667%; /* (100/cw) x 100% */
@@ -62,12 +103,13 @@ p.line-height {
 
 /* Button Stuff */
 .swagButton {
-	color: #31A6FF;
+	/* color: #31A6FF; */
+	color: #77B5FE
 	font-family: "proxima nova"
 	font-weight: 100;
 	font-size: 20px;
 	text-align: center;
-	/** circular outline **/	
+	/** circular outline **/
 	border: solid 2px #31A6FF;
 	border-radius: 60px;
 	padding: 10px 200px;
@@ -80,3 +122,41 @@ p.line-height {
 	background-color: #31A6FF;
 	color: #fff;
 }
+
+          * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background-color: #000;
+            }
+            .fly-in-text {
+                list-style: none;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+            }
+            .fly-in-text li {
+                display: inline-block;
+                margin-right: 50px;
+                font-family: Open Sans, Arial;
+                font-weight: 300;
+                font-size: 4em;
+                color: #fff;
+                opacity: 1;
+                transition: all 2.5s ease;
+            }
+            .fly-in-text li:last-child {
+                margin-right: 0;
+            }
+            .fly-in-text.hidden li {
+                opacity: 0;
+            }
+            .fly-in-text.hidden li:nth-child(1) { transform: translateX(-200px) translateY(-200px); }
+            .fly-in-text.hidden li:nth-child(2) { transform: translateX(20px) translateY(100px); }
+            .fly-in-text.hidden li:nth-child(3) { transform: translateX(-150px) translateY(-80px); }
+            .fly-in-text.hidden li:nth-child(4) { transform: translateX(10px) translateY(-200px); }
+            .fly-in-text.hidden li:nth-child(5) { transform: translateX(-300px) translateY(200px); }
+            .fly-in-text.hidden li:nth-child(6) { transform: translateX(20px) translateY(-20px); }
+            .fly-in-text.hidden li:nth-child(7) { transform: translateX(30px) translateY(200px); }
