@@ -1,45 +1,75 @@
-<div class="register-background"></div>
-<div class="container">
-    <div class=container style= "background-color: white; border-radius: 25px; width: 400px; height: 500px; position: absolute; z-index: -2; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-    <img src="assets/images/WaterColorBackground.png" style="border-radius: 25px; width: 400px; height: 500px; position: absolute; z-index: -1; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: .2;">
-    <div class="container">
-
-        <div class="page-header">
-            <br><br><br><br><br><br><br>
-            <h1 style="text-align: center">User Registration</h1>
-            <br>
+<div class="blurred-bg-container2">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <div class="content">
+      <div class="text">
+          <div style="text-align: center">
+                  <h1> <font size = "50"><b>User Registration</b></font></h1>
+                  <p class="small"> </p>
+          </div>
+  
+          
+            <div style="text-align: center">
+                        
+                <center><form ng-submit="userCtrl.regUser(regData)" style="width: 300px; height: 50px; text-align: left">
+                    <h1><label><b>Email:</b></label></h1>
+                    <div class="input email">
+                        <input class="form-control" type="text" name="email" id="email" placeholder="please enter email" ng-model="userCtrl.regData.email">
+                    </div>       
+                    
+                    <h1><small><label><b>Username:</b></label></small></h1>
+                    <div class="input uname">
+                        <input class="form-control" type="text" name="username" id="username" placeholder="please enter username" ng-model="userCtrl.regData.username">
+                    </div>       
+                
+                    <h1><small><label><b>Password:</b></label></small></h1>
+                    <div class="input pass">
+                        <input class="form-control" type="password" name="password" id="password" placeholder="please enter password" ng-model="userCtrl.regData.password">
+                    </div>
+                    <br>
+                    <center><h1><button class="swagButton2" type="submit" id="register" style="cursor: pointer">Register</button></h1></center>
+                
+                </form></center>
+                <br>
+            </div>
+                
         </div>
-
-        <center><form ng-submit="userCtrl.regUser(regData)" style="width: 300px; height: 50px; text-align: left">
-            <label><b>Email:</b></label>
-            <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="userCtrl.regData.email">
-            <br>
-
-            <label><b>Username:</b></label>
-            <input class="form-control" type="text" name="username" placeholder="please enter username" ng-model="userCtrl.regData.username">
-            <br>
-
-            <label><b>Password:</b></label>
-            <input class="form-control" type="password" name="password" placeholder="please enter password" ng-model="userCtrl.regData.password">
-            <br>
-
-            <center><button class="btn btn-primary" type="submit">Register</button></center>
-
-        </form></center>
-        <br>
-        
-        <div class="jumbotron text-center" ng-show="userCtrl.loading">
-            <span class="glyphicon glyphicon-repeat spinner"></span>
-            <p>Loading...</p>
-        </div>
-
-        <div class="row show-hide-message" ng-show="userCtrl.successMsg">
-            <div class="alert alert-success" style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);">{{userCtrl.successMsg}}</div>
-        </div>
-
-        <div class="row show-hide-message" ng-show="userCtrl.errorMsg">
-            <div class="alert alert-danger" style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%);">{{userCtrl.errorMsg}}</div>
-        </div>
-
+  
+        <div class="blur"></div>
     </div>
 </div>
+
+
+<div class="jumbotron text-center" ng-show="userCtrl.loading">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Loading...</p>
+</div>
+
+<div class="row show-hide-message" ng-show="userCtrl.successMsg">
+    <div class="alert alert-success" style="position: absolute; top: 80%; left: 40%; transform: translate(-50%, -50%);">{{userCtrl.successMsg}}</div>
+</div>
+
+<div class="row show-hide-message" ng-show="userCtrl.errorMsg">
+    <div class="alert alert-danger" style="position: absolute; top: 80%; left: 40%; transform: translate(-50%, -50%);">{{userCtrl.errorMsg}}</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#register").click(function(){
+        if($("#email").val() == ""){
+            $(".input").addClass("error");
+        }
+
+        if($("#username").val() == ""){
+            $(".uname").addClass("error");
+        }
+
+        if($("#password").val() == ""){
+            $(".pass").addClass("error");
+        }
+    })
+    
+})
+
+
+</script>
