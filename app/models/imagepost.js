@@ -10,6 +10,7 @@ var ImagePostSchema = new Schema ({
     imgTitle: String,
     imgDescription: String,
     imgRef: [Schema.Types.ObjectId],
+    date: { type: Date, default: Date.now }, 
     imgLocation: String,
     username: String,
     likeCount: Number,

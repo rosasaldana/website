@@ -13,5 +13,15 @@ angular.module('locationServices', [])
             return $http.get('/location-api/getLocations');
         };
 
+        //Location.addLocation() => function call
+        locationFactory.addLocation = function(location){
+            return $http.post('/location-api/addLocation', location);
+        }
+
+        //Location.toAddress() => function call
+        locationFactory.convertToAddress = function(coordinate){
+            return $http.post('/location-api/getAddress', coordinate);
+        }
+
         return locationFactory;
     });

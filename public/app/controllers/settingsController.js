@@ -4,22 +4,6 @@
 
 angular.module('settingsController', ['userServices'])
 
-    .directive("imageread", [function() {
-        return{
-            link: function(scope, element, attributes){
-                element.bind("change", function(changeEvent){
-                    scope.image = element[0].files[0];
-                    var reader = new FileReader();
-                    reader.onload = function(loadEvent) {
-                        scope.previewImage = reader.result;
-                        scope.displayPic();
-                    }
-                    reader.readAsDataURL(scope.image);
-                });
-            }
-        }
-    }])
-
     .controller('settingsController', function($scope, $window, User){
         var settings = this;
         var profilePic = document.getElementById('previewProfilePic');

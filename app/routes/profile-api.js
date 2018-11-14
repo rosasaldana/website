@@ -66,11 +66,10 @@ module.exports = function(router) {
                     imageposts.forEach(post => {
                         if(post.imgRef.toString() == files[file]._id) {
                             post.filename = files[file].filename;
-                            console.log(post);
                         }
                     });
 				}
-               
+
 				res.send(imageposts);
 			})
 		});
@@ -83,9 +82,14 @@ module.exports = function(router) {
 				console.log(err);
 			}
 			if(file != null) {
-			const readstream = gfs.createReadStream((file.filename));
-			readstream.pipe(res);
-			}
+                const readstream = gfs.createReadStream((file.filename));
+	            readstream.pipe(res);
+			} else {
+                res.json({
+                    success: false,
+                    message: "File not found"
+                });
+            }
 		});
 	});
 
@@ -188,11 +192,11 @@ module.exports = function(router) {
             }
             var usersLiked = post.likes;
             if(usersLiked.includes(req.params.username)) {
-                ImagePost.findOneAndUpdate({_id : req.params.id}, 
+                ImagePost.findOneAndUpdate({_id : req.params.id},
                     {
                         "$inc" : {"likeCount": -1},
                         "$pull" : {"likes" : req.params.username},
-                        "heartstatus" : "-o" 
+                        "heartstatus" : "-o"
                     }, {new:true}, function(err, raw) {
                         if(err) {
                             throw err;
@@ -203,21 +207,21 @@ module.exports = function(router) {
                             "heartstatus" : "-o"
                         });
                     });
-            } 
+            }
             else {
-                ImagePost.findOneAndUpdate({_id : req.params.id}, 
+                ImagePost.findOneAndUpdate({_id : req.params.id},
                     {
                         "$inc" : {"likeCount": 1},
                         "$push" : {"likes" : req.params.username},
-                        "heartstatus" : ""  
+                        "heartstatus" : ""
                     }, {new:true}, function(err, raw) {
                         if(err) {
                             throw err;
                         }
-                        res.json({ 
+                        res.json({
                             message: "success",
                             updatedLikes: raw.likeCount,
-                            "heartstatus" : ""  
+                            "heartstatus" : ""
                         });
                     });
             }
@@ -226,13 +230,13 @@ module.exports = function(router) {
 
     //Router to post a comment
     router.post('/comments/:user/:id/:message', function(req,res) {
-        ImagePost.findOneAndUpdate({_id: req.params.id}, 
+        ImagePost.findOneAndUpdate({_id: req.params.id},
             {
                 "$push" : {"comments" : {"user" : req.params.user, "message": req.params.message}}
             }, {new: true}, function(err, post) {
                 if(err) {
                     throw err;
-                } 
+                }
                 res.json(post);
             });
     });

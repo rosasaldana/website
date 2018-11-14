@@ -13,15 +13,26 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Upload Photo</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="profileCtrl.uploadPhoto(false)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="submission-form">
+                        <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="uploadPhoto-form">
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Title</label>
                                 <input type="text" class="form-control" name="imgTitle" ng-model="profileCtrl.imgTitle">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Photo Location</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <input id="postLocation" type="text" class="form-control" name="imgLocation" ng-model="profileCtrl.imgLocation">
+                                    </div>
+                                    <div class="col-5">
+                                        <button type="button" class="btn btn-primary" ng-click="profileCtrl.getUserLocation()">Current Location</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">Description</label>
@@ -29,16 +40,18 @@
                             </div>
                             <div class="form-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="userImg" aria-describedby="userImg">
+                                    <input imageread id="postFile" type="file" class="custom-file-input" name="userImg" aria-describedby="userImg" accept=".jpg,.jpeg,.png">
                                     <label class="custom-file-label" for="userImg">Choose photo</label>
                                 </div>
+                                <br><br><br>
+                                <img class="responsive-image" style="max-width: 200px;" id="PreviewUploadImage">
                             </div>
                             <input type="hidden" name="username" value="{{profileCtrl.username}}">
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form" accept=".jpg,.jpeg,.png">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="profileCtrl.uploadPhoto(false)">Close</button>
+                        <input type="submit" value="Upload Photo" class="btn btn-primary" ng-click="profileCtrl.uploadPhoto(profileCtrl.imagePost)">
                     </div>
                 </div>
             </div>

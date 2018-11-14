@@ -3,6 +3,23 @@
 */
 angular.module('mainController', ['authServices', 'userServices'])
 
+    // directive to preview image as of now it is used in settingsController and profileController
+    .directive("imageread", [function() {
+        return {
+            link: function(scope, element, attributes) {
+                element.bind("change", function(changeEvent) {
+                    scope.image = element[0].files[0];
+                    var reader = new FileReader();
+                    reader.onload = function(loadEvent) {
+                        scope.previewImage = reader.result;
+                        scope.displayPic();
+                    }
+                    reader.readAsDataURL(scope.image);
+                });
+            }
+        }
+    }])
+
     //mainCtrl called in index.html
     .controller('mainCtrl', function(User, $timeout, $location, $rootScope, $scope) {
         var app = this;
@@ -12,12 +29,11 @@ angular.module('mainController', ['authServices', 'userServices'])
         $rootScope.$on('$routeChangeStart', function() {
             if (User.isLoggedIn()) {
                 User.getUser().then(function(data) {
-                    if(data.data.success != false){
+                    if (data.data.success != false) {
                         app.isLoggedIn = true;
                         app.username = data.data.username;
                         app.email = data.data.email;
-                    }
-                    else{
+                    } else {
                         app.isLoggedIn = false;
                         app.logout();
                     }
