@@ -1,60 +1,43 @@
-<div class="container-fluid" style="min-height: 100vh">
+<div class="container-fluid">
 
-    <!-- Uploading photo -->
     <div class="row">
-        <div class="col-sm-12">
-            <button class="btn btn-primary" id="upload-button" data-toggle="modal" data-target="#upload-form">+Upload Photo</button>
+        <div class="col text-right">
+            <button type="button" class="btn-sm btn-primary"  data-toggle="modal" data-target="#upload-form">Upload Photo</button>
+            <button type="button" class="btn-sm btn-primary">My Posts</button>
         </div>
-        <div class="row" ng-repeat="post in profileCtrl.userposts">
-            <p></p>
-        </div>
-        <div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Upload Photo</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="submission-form">
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Title</label>
-                                <input type="text" class="form-control" name="imgTitle" ng-model="profileCtrl.imgTitle">
-                            </div>
-                            <div class="form-group">
-                                <label for="message-text" class="col-form-label">Description</label>
-                                <textarea class="form-control" name="imgDescription" ng-model="profileCtrl.imgDescription"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="userImg" aria-describedby="userImg">
-                                    <label class="custom-file-label" for="userImg">Choose photo</label>
-                                </div>
-                            </div>
-                            <input type="hidden" name="username" value="{{profileCtrl.username}}">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form" accept=".jpg,.jpeg,.png">
-                    </div>
-                </div>
+    </div>
+    <br>
+
+    <!-- Main Profile Content -->
+    <div class="row profile-content">
+        <!-- Displaying user's friend -->
+        <div class="col-md-2">
+            <div class="row">
+                <input type="text" class="form-control search-bar" placeholder="Friends" ng-model="friendSearchText"/>
+                <!-- <div class="table-responsive"> -->
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="friend in profileCtrl.friends.displayName | filter: friendSearchText">
+                                <td class="text">{{friend}}</td>
+                                <td>
+                                    <img class="del-user-img pull-right" src="assets/images/unfollow-user.png" ng-click="profileCtrl.unfollowUser(friend)" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <img class="add-user-img pull-right" src="assets/images/add-user.png" data-toggle="modal" data-target="#addFriendModal" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <!-- </div> -->
             </div>
         </div>
-    </div>
-
-    <!-- Mapbox display -->
-    <div class="MapboxApi">
-        <div mapbox></div>
-    </div>
-
-    <div class="row justify-content-between profile-content">
+        <!-- End of friends list -->
 
         <!-- Posts -->
-        <div class="col-md-4 top-margin border border-white profile-posts">
-            <p class="text text-white">posts go here</p>
+        <div class="col-md-4 profile-posts">
             <div class="row" ng-repeat="post in profileCtrl.userposts">
                 <div class="col-sm-12">
                     <div class="card mb-3">
@@ -67,57 +50,75 @@
                             <p class="card-text">{{post.imgDescription}}</p>
                             <i class="fa fa-heart{{post.heartstatus}} fa-2x" style="margin-right: 20px; cursor: pointer" aria-hidden="true" ng-click="profileCtrl.updateLikes(this.post._id)"></i>
                             <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
-                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;"aria-hidden="true">
+                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;" aria-hidden="true">
                             </i>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" ng-click="profileCtrl.deleteImagePost(this.post._id)" href="#">Delete Post <i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <div class="card-body" style="padding-bottom: 0px;">
-                           <p class="card-text">{{post.likeCount}} Likes</p>
+                            <p class="card-text">{{post.likeCount}} Likes</p>
                         </div>
                         <div class="card-body" style="padding-top: 10px;">
                             <p class="card-text" ng-repeat="comment in post.comments">
-                                <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;"class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)"></i></span>
+                                <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;" class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)"></i></span>
                             </p>
                             <hr>
                             <form ng-submit="postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
-                                <input type="text" placeholder="Type a comment..." class="form-control" id ="comment-input" name="userComment" 
-                                ng-model="profileCtrl.userComment">
+                                <input type="text" placeholder="Type a comment..." class="form-control" id="comment-input" name="userComment" ng-model="profileCtrl.userComment">
                             </form>
-                            
-                      </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- End of posts -->
 
-        <!-- Displaying user's friend -->
-        <div class="col-sm-2 top-margin">
-            <div class="row pull-right">
-                <table class="table table-sm table-responsive">
-                    <tbody>
-                        <tr>
-                            <td colspan="2">
-                                <input type="text" class="form-control search-bar" placeholder="Friends" ng-model="friendSearchText" />
-                            </td>
-                        </tr>
-                        <tr ng-repeat="friend in profileCtrl.friends.displayName | filter: friendSearchText">
-                            <td class="text text-white">{{friend}}</td>
-                            <td>
-                                <img class="del-user-img pull-right" src="assets/images/unfollow-user.png" ng-click="profileCtrl.unfollowUser(friend)" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <img class="add-user-img pull-right" src="assets/images/add-user.png" data-toggle="modal" data-target="#addFriendModal" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Mapbox display -->
+        <div class="col">
+            <div mapbox></div>
+        </div>
+
+    </div>
+    <!-- End of main profile content -->
+
+    <!-- Modal for Uploading photo -->
+    <div class="modal fade" id="upload-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/profile-api/userimages" method="POST" enctype="multipart/form-data" id="submission-form">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Title</label>
+                            <input type="text" class="form-control" name="imgTitle" ng-model="profileCtrl.imgTitle">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Description</label>
+                            <textarea class="form-control" name="imgDescription" ng-model="profileCtrl.imgDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="userImg" aria-describedby="userImg">
+                                <label class="custom-file-label" for="userImg">Choose photo</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="username" value="{{profileCtrl.username}}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Upload Photo" class="btn btn-primary" form="submission-form" accept=".jpg,.jpeg,.png">
+                </div>
             </div>
         </div>
     </div>
+    <!-- End of uploading photo -->
 
     <!-- Modal for adding a friend -->
     <div class="modal fade" id="addFriendModal" tabindex="-1" role="dialog">
@@ -165,5 +166,6 @@
             </div>
         </div>
     </div>
+    <!-- End of add friend modal -->
 
 </div>

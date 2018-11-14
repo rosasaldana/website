@@ -16,8 +16,8 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 var map = new mapboxgl.Map({
                     container: 'map', // container id
                     style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location
-                    center: [20.000, 0],
-                    zoom: 2 //Zoom all the way out would show the entire map
+                    center: [-50.000, 20],
+                    zoom: 1 //Zoom all the way out would show the entire map
                 });
 
                 //Adding the GeoCoder Api to search within a map
@@ -261,9 +261,9 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         }
 
         profile.deleteImagePost = function(postId) {
-            ImagePosts.deletePost(postId).then(function() {            
+            ImagePosts.deletePost(postId).then(function() {
                 $window.location.href = '/profile';
-            }); 
+            });
 
         }
 
@@ -303,6 +303,6 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 //         }
                 //     }
                 // }console.log(response.data.comments);
-            }); 
+            });
         }
     });
