@@ -16,7 +16,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 var map = new mapboxgl.Map({
                     container: 'map', // container id
                     style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location
-                    center: [-50.000, 0],
+                    center: [-50.000, 20],
                     zoom: 1 //Zoom all the way out would show the entire map
                 });
 
@@ -303,6 +303,10 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             ImagePosts.deletePost(postId).then(function() {
                 $window.location.href = '/profile';
             });
+<<<<<<< HEAD
+=======
+
+>>>>>>> ProfileLayout
         }
 
         //Function to update the like count
@@ -344,6 +348,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 //     }
                 // }console.log(response.data.comments);
             });
+<<<<<<< HEAD
         }
 
         //Function to get user location
@@ -360,5 +365,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     });
                 });
             }
+=======
+>>>>>>> ProfileLayout
         }
     });

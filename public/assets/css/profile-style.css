@@ -1,43 +1,15 @@
-#upload-button {
-    margin-top: -25px;
-    margin-bottom: 15px;
-}
-
 .top-margin{
     margin-top: 10px;
-}
-
-.profile-content{
-    position: relative;
-    bottom: -50px;
-    width: 98%;
-    margin-right: 0px;
-    margin-left: 10px;
 }
 
 .search-bar{
     height: 50%;
 }
 
-.MapboxApi {
-    position: absolute;
-    height: calc(100vh - 170px);
-    width: 98%;
-    opacity: 0.9;
-    transition: 0.5s;
-}
-
 .mapboxgl-canvas, .mapboxgl-map{
-    margin: auto;
-    height: calc(100vh - 170px);
-    width: 98%;
-}
-
-.MapboxApi:hover .mapboxgl-map{
-    opacity: 1;
-}
-.MapboxApi:hover, .mapboxgl-canvas:hover{
-    opacity: 1;
+    margin: 0px;
+    height: calc(100vh - 250px);
+    width: 100%;
 }
 
 .del-user-img{
