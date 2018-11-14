@@ -298,15 +298,24 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             profile.uploadImagePreview.alt = "preview";
         }
 
+        //Function to get image posts from a given user
+        profile.displayUserPosts = function(name){
+            profile.postsModalTitle = name;
+            var userPosts = [];
+            for(index = 0; index < profile.userposts.length; index++){
+                if(profile.userposts[index].username == name){
+                    userPosts.push(profile.userposts[index]);
+                }
+            }
+            profile.modalUserPosts = userPosts;
+            document.getElementById("displayPostsModal").click();
+        }
+
         //Function to delete post
         profile.deleteImagePost = function(postId) {
             ImagePosts.deletePost(postId).then(function() {
                 $window.location.href = '/profile';
             });
-<<<<<<< HEAD
-=======
-
->>>>>>> ProfileLayout
         }
 
         //Function to update the like count
@@ -348,7 +357,6 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 //     }
                 // }console.log(response.data.comments);
             });
-<<<<<<< HEAD
         }
 
         //Function to get user location
@@ -365,7 +373,5 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     });
                 });
             }
-=======
->>>>>>> ProfileLayout
         }
     });

@@ -32,6 +32,11 @@
     overflow-y: auto;
 }
 
+.posts-modal-body{
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
+}
+
 .profile-posts {
     max-height: 65vh;
     overflow-y: scroll;
