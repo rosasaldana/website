@@ -66,7 +66,7 @@ p.line-height {
 
 .blurred-bg-contain .content {
   background: inherit;
-  width: 60%; /* =cw */
+  width: 50%; /* =cw */
   height: 40%; /* =ch */
   border-radius: 8px;
   box-shadow: 0 0 32px rgba(0, 0, 0, 0.5);
