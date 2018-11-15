@@ -58,9 +58,9 @@ module.exports = function(router) {
                         to: user.email, // list of receivers
                         subject: 'PixMap: Authenticate Account', // Subject line
                         text:'Hello '+ user.username + 'Thank you for registering at PixMap. Please ' +
-                        'click on the link below to compelete your activation:"http://localhost:8080/activate/' + user.temporaryToken,
+                        'click on the link below to compelete your activation:"https://pixmapworld.herokuapp.com/activate/' + user.temporaryToken,
                         html: 'Hello<strong> '+ user.username + '</strong>, <br><br>Thank you for registering at PixMap. Please ' +
-                        'click on the link below to compelete your activation: <br><br><a href="http://localhost:8080/activate/' + user.temporaryToken + '">http://localhost:8080</a>'
+                        'click on the link below to compelete your activation: <br><br><a href="https://pixmapworld.herokuapp.com/activate/' + user.temporaryToken + '">https://pixmapworld.herokuapp.com/</a>'
                     };
                     transporter.sendMail(mailOptions, function(err, info){
                         if(err) throw err;
@@ -208,9 +208,9 @@ module.exports = function(router) {
                             to: user.email, // list of receivers
                             subject: 'PixMap: Authentication Link Request', // Subject line
                             text:'Hello '+ user.username + ' You recently requested a new account activation link. Please click ' +
-                            'on the following link to compete your activation: "http://localhost:8080/activate/' + user.temporaryToken,
+                            'on the following link to compete your activation: https://pixmapworld.herokuapp.com/activate/' + user.temporaryToken,
                             html: 'Hello<strong> '+ user.username + '</strong>, <br><br>You recently requested a new account activation link. Please click ' +
-                            'on the following link to compete your activation: <br><br><a href="http://localhost:8080/activate/' + user.temporaryToken + '">http://localhost:8080</a>'
+                            'on the following link to compete your activation: <br><br><a href="https://pixmapworld.herokuapp.com/activate/' + user.temporaryToken + '">https://pixmapworld.herokuapp.com/</a>'
                         };
                         transporter.sendMail(mailOptions, function(err, info){
                             if(err) throw err;
