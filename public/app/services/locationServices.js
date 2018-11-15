@@ -23,5 +23,10 @@ angular.module('locationServices', [])
             return $http.post('/location-api/getAddress', coordinate);
         }
 
+        //Location.toCoordinate() => function call
+        locationFactory.toCoordinate = function(address){
+            return $http.post('/location-api/getCoordinates/' + address);
+        }
+
         return locationFactory;
     });

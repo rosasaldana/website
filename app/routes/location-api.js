@@ -30,15 +30,15 @@ module.exports = function(router){
         }
     });
 
-    //Middleware route to get the coordinates and locations of a specified place
+    //Router to convert address to coordinate
     router.use('/addLocation', function(req, res, next){
         if(req.body.address){
             geocodingClient.forwardGeocode({
                 query: req.body.address, limit: 1
             }).send().then(function(response){
-                req.body.longitude = response.body.features[0].center[0];
-                req.body.latitude = response.body.features[0].center[1];
-                console.log(req.body.longitude, req.body.latitude);
+                req.body.coordinate = {};
+                req.body.coordinate.longitude = response.body.features[0].center[0];
+                req.body.coordinate.latitude = response.body.features[0].center[1];
                 next();
             });
         } else{
@@ -58,12 +58,11 @@ module.exports = function(router){
                 message: 'No location has been provided'
             });
         } else{
-            newLocation.address = req.body.address;
-            newLocation.longitude = req.body.longitude;
-            newLocation.latitude = req.body.latitude;
+            newLocation.longitude = req.body.coordinate.longitude;
+            newLocation.latitude = req.body.coordinate.latitude;
             newLocation.frequency = 10;
 
-            Location.findOne({longitude: req.body.longitude, latitude: req.body.latitude}, function(err, location){
+            Location.findOne({longitude: newLocation.longitude, latitude: newLocation.latitude}, function(err, location){
                 if(err) throw err;
 
                 if(location){
@@ -83,7 +82,11 @@ module.exports = function(router){
                     else{
                         res.json({
                             success: true,
-                            message: 'Successfully saved location in database'
+                            message: 'Successfully saved location in database',
+                            coordinate: {
+                                longitude: newLocation.longitude,
+                                latitude: newLocation.latitude
+                            }
                         });
                     }
                 });

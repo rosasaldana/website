@@ -51,7 +51,7 @@
                             <p class="card-text">{{post.imgDescription}}</p>
                             <i class="fa fa-heart{{post.heartstatus}} fa-2x" style="margin-right: 20px; cursor: pointer" aria-hidden="true" ng-click="profileCtrl.updateLikes(this.post._id)"></i>
                             <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
-                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;" aria-hidden="true">
+                            <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;" aria-hidden="true" ng-show="post.username==profileCtrl.username">
                             </i>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" ng-click="profileCtrl.deleteImagePost(this.post._id)" href="#">Delete Post <i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -103,7 +103,7 @@
                             <label for="image-location" class="col-form-label">Photo Location</label>
                             <div class="row">
                                 <div class="col">
-                                    <input id="postLocation" type="text" class="form-control" name="imgCityLocation" ng-model="profileCtrl.imgLocation">
+                                    <input id="postLocation" type="text" class="form-control" name="imgLocation" ng-model="profileCtrl.imgLocation.address">
                                 </div>
                                 <div class="col-5">
                                     <button type="button" class="btn btn-primary" ng-click="profileCtrl.getUserLocation()">Use Current Location</button>
@@ -122,6 +122,8 @@
                         </div>
                         <img id="PreviewUploadImage" class="responsive-image">
                         <input type="hidden" name="username" value="{{profileCtrl.username}}">
+                        <input hidden name="longitude" value="{{profileCtrl.imgLocation.longitude}}">
+                        <input hidden name="latitude" value="{{profileCtrl.imgLocation.latitude}}">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -187,13 +189,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{profileCtrl.postsModalTitle}}'s Posts</h5>
+                    <h5 class="modal-title" ng-show="!profileCtrl.userModal">Location Posts</h5>
+                    <h5 class="modal-title" ng-show="profileCtrl.userModal">{{profileCtrl.postsModalTitle}}'s Posts</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body posts-modal-body">
-                    <div class="row" ng-repeat="post in profileCtrl.modalUserPosts">
+                    <div class="row" ng-repeat="post in profileCtrl.modalPosts | orderBy: 'date':true">
                         <div class="col-sm">
                             <div class="card-body" style="padding: 10px">
                                 <h5 class="card-title">{{post.imgTitle}}</h5>
@@ -203,7 +206,7 @@
                                 <p class="card-text">{{post.imgDescription}}</p>
                                 <i class="fa fa-heart{{post.heartstatus}} fa-2x" style="margin-right: 20px; cursor: pointer" aria-hidden="true" ng-click="profileCtrl.updateLikes(this.post._id)"></i>
                                 <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
-                                <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;" aria-hidden="true">
+                                <i href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-h fa-2x" style="float: right; cursor: pointer;" aria-hidden="true" ng-show="post.username==profileCtrl.username">
                                 </i>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" ng-click="profileCtrl.deleteImagePost(this.post._id)" href="#">Delete Post <i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -223,9 +226,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-
                 </div>
             </div>
         </div>

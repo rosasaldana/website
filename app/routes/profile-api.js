@@ -113,6 +113,7 @@ module.exports = function(router) {
 
     //Route to upload image for a given user
 	router.post('/userimages', upload.single('userImg'), function(req, res) {
+        console.log(req.body);
          var imagePost = new ImagePost();
 		 imagePost.imgTitle = req.body.imgTitle;
 		 imagePost.imgDescription = req.body.imgDescription;
@@ -120,7 +121,10 @@ module.exports = function(router) {
 		 imagePost.username = req.body.username;
          imagePost.likeCount = 0;
          imagePost.heartstatus = "-o";
-         imagePost.imgLocation = req.body.imgLocation;
+         imagePost.imgLongitude = req.body.longitude;
+         imagePost.imgLatitude = req.body.latitude;
+         console.log(imagePost);
+         console.log(req.body);
 
 		imagePost.save(function(err) {
 			if(err) {

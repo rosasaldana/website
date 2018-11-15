@@ -173,6 +173,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             username: [],
             displayName: []
         };
+        profile.imgLocation = {};
         profile.uploadImagePreview = document.getElementById("PreviewUploadImage");
         var userComment = $scope.userComment;
 
@@ -287,16 +288,20 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 uploadForm.reset();
                 profile.uploadImagePreview.src = "";
                 profile.uploadImagePreview.alt = "";
+                profile.imgLocation = {};
             } else {
                 if(profile.uploadImagePreview.src == "" || profile.uploadImagePreview.alt == ""){
                     alert("No image was selected!");
                 } else if(!profile.imgLocation){
                     alert("Photo Location field is required!");
                 } else{
-                    var location = { address: profile.imgLocation };
-                    Locations.addLocation(location).then(function(res){
+                    Locations.addLocation(profile.imgLocation).then(function(res){
                         if(res.data.success){
-                            uploadForm.submit();
+                            profile.imgLocation.longitude = res.data.coordinate.longitude;
+                            profile.imgLocation.latitude = res.data.coordinate.latitude;
+                            setTimeout(function(){
+                                uploadForm.submit();
+                            }, 10);
                         }
                         else{
                             alert("Not a valid location!");
@@ -321,7 +326,9 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     userPosts.push(profile.userposts[index]);
                 }
             }
-            profile.modalUserPosts = userPosts;
+
+            profile.userModal = true;
+            profile.modalPosts = userPosts;
             document.getElementById("displayPostsModal").click();
         }
 
@@ -384,7 +391,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     };
                     Locations.convertToAddress(userCoordinate).then(function(res){
                         document.getElementById("postLocation").value = res.data.address;
-                        profile.imgLocation = res.data.address;
+                        profile.imgLocation.address = res.data.address;
                     });
                 });
             }
@@ -392,26 +399,32 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
 
         //Function to load pictures on map click
         $scope.onMapClick = function(longitude, latitude, mapZoom){
-            console.log(mapZoom);
             var locationPosts = [];
-            var coordinate = {
-                longitude: longitude,
-                latitude: latitude
-            };
-            // Locations.convertToAddress(coordinate).then(function(res){
-            //     var mapClickAddress = res.data.address;
-            //     var mapSplit = mapClickAddress.split(",");
-            //     console.log(mapClickAddress);
-            //     // for(index = 0; index < profile.userposts.length; index++){
-            //     //     var postSplit = profile.userPosts[index].imgLocation;
-            //     //     if(mapZoom < 1){ do country
-            //     //         if(postSplit[postSplit.length-1] == mapSplit[mapSplit.length-1]){
-            //     //             locationPosts.push(profile.userPosts[index]);
-            //     //         }
-            //     //     } else if(mapZoom > 2 && zoom < 5){
-            //     //
-            //     //     }
-            //     // }
-            // });
+            var latBuffer = 0, longBuffer = 0;
+
+            if(mapZoom <= 2){
+                longBuffer = 2;
+                latBuffer = 4;
+            } else if(mapZoom > 2 && mapZoom <= 4){
+                longBuffer = latBuffer = 1;
+            } else if(mapZoom > 4 && mapZoom <= 6){
+                longBuffer = latBuffer = 0.5;
+            } else {
+                longBuffer = latBuffer = 0.1;
+            }
+
+            for(index = 0; index < profile.userposts.length; index++){
+                var post = profile.userposts[index];
+                if(longitude <= post.imgLongitude + longBuffer && longitude >= post.imgLongitude - longBuffer){
+                    if(latitude <= post.imgLatitude + latBuffer && latitude >= post.imgLatitude - latBuffer){
+                        locationPosts.push(profile.userposts[index]);
+                    }
+                }
+            }
+
+            $scope.$apply(function(){
+                profile.modalPosts = locationPosts;
+                document.getElementById("displayPostsModal").click();
+            }, 10);
         }
     });
