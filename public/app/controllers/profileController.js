@@ -338,21 +338,31 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         }
 
         //Function for adding a comment to the posts
-        $scope.postComment = function(postId, username, message) {
-            ImagePosts.postComment(postId, profile.username, message).then(function(response) {
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
+        profile.postComment = function(postId, username, message) {
+            if(message){
+                ImagePosts.postComment(postId, profile.username, message).then(function(response) {
+                    ImagePosts.getComments(postId).then(function(response) {
+                        for(index = 0; index < profile.userposts.length; index++){
+                            if(response.data._id == profile.userposts[index]._id){
+                                profile.userposts[index].comments = response.data.comments;
+                            }
+                        }
+                    });
+                    profile.userComment = "";
+                    profile.modalUserComment = "";
                 });
-                $scope.profileCtrl.userComment ="";
-                return false;
-            });
+            }
         }
 
         //Function for deleting a comment from the given post
         profile.deleteComment = function(postId, commentId) {
             ImagePosts.deleteComment(postId, commentId).then(function(response) {
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
+                ImagePosts.getComments(postId).then(function(response) {
+                    for(index = 0; index < profile.userposts.length; index++){
+                        if(response.data._id == profile.userposts[index]._id){
+                            profile.userposts[index].comments = response.data.comments;
+                        }
+                    }
                 });
             });
         }

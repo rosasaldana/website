@@ -254,5 +254,20 @@ module.exports = function(router) {
             });
     });
 
+    router.get('/getComments/:postId', function(req, res){
+        ImagePost.findOne({_id: req.params.postId}, function(err, imagePost){
+            if(err) throw err;
+
+            if(imagePost){
+                res.send(imagePost)
+            } else{
+                res.json({
+                    success: false,
+                    message: "Could not get post"
+                });
+            }
+        });
+    });
+
 	return router;
 }

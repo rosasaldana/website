@@ -62,10 +62,10 @@
                         </div>
                         <div class="card-body" style="padding-top: 10px;">
                             <p class="card-text" ng-repeat="comment in post.comments">
-                                <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;" class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)"></i></span>
+                                <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;" class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)" ng-show="comment.user==profileCtrl.username"></i></span>
                             </p>
                             <hr>
-                            <form ng-submit="postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
+                            <form ng-submit="profileCtrl.postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
                                 <input type="text" placeholder="Type a comment..." class="form-control" id="comment-input" name="userComment" ng-model="profileCtrl.userComment">
                             </form>
                         </div>
@@ -181,7 +181,7 @@
     </div>
     <!-- End of add friend modal -->
 
-    <!-- Modal for displaying posts for a given user -->
+    <!-- Modal for displaying posts for a user/location -->
     <button hidden id="displayPostsModal" type="button" class="btn btn-primary" data-toggle="modal" data-target=".posts-modal"></button>
     <div class="modal fade posts-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -214,15 +214,18 @@
                             </div>
                             <div class="card-body" style="padding-top: 10px;">
                                 <p class="card-text" ng-repeat="comment in post.comments">
-                                    <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;" class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)"></i></span>
+                                    <span><b>{{comment.user}}</b> {{comment.message}} <i style="float: right; cursor: pointer;" class="fa fa-times" aria-hidden="true" ng-click="profileCtrl.deleteComment(this.post._id, comment._id)" ng-show="comment.user==profileCtrl.username"></i></span>
                                 </p>
                                 <hr>
-                                <form ng-submit="postComment(this.post._id, profileCtrl.username, profileCtrl.userComment)" id="comment-form">
-                                    <input type="text" placeholder="Type a comment..." class="form-control" id="comment-input" name="userComment" ng-model="profileCtrl.userComment">
+                                <form ng-submit="profileCtrl.postComment(this.post._id, profileCtrl.username, profileCtrl.modalUserComment)" id="comment-form">
+                                    <input type="text" placeholder="Type a comment..." class="form-control" id="comment-input" name="userComment" ng-model="profileCtrl.modalUserComment">
                                 </form>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+
                 </div>
             </div>
         </div>
