@@ -225,7 +225,6 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 for(index in response.data){
                     profile.userposts.push(response.data[index]);
                 }
-                console.log(profile.userposts);
             });
         }
 
@@ -241,6 +240,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 if (response.data.success == true) {
                     profile.friends.displayName.push(user);
                     profile.friends.username.push(username);
+                    profile.getImagePosts(username);
                 } else {
                     profile.errorMsg = response.data.message;
                 }
@@ -260,6 +260,12 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     var index = profile.friends.displayName.indexOf(user);
                     profile.friends.displayName.splice(index, 1);
                     profile.friends.username.splice(index, 1);
+
+                    for(i = 0; i < profile.userposts.length; i++){
+                        if(profile.userposts[i].username == username){
+                            profile.userposts.splice(i, 1);
+                        }
+                    }
                 }
             });
         };
