@@ -9,22 +9,40 @@ var geocodingClient = mbxGeocoding({accessToken: 'pk.eyJ1IjoiZG91Z2FndWVycmEiLCJ
 
 module.exports = function(router){
 
-    // Middleware to convert location to coordinates before storing in database
-    // Taking advantage of mapbox api
-    router.use('/addLocation', function(req, res, next){
-        req.coordinate = null;
-        if(req.body.address){
-            var queryData = req.body.address;
-            geocodingClient.forwardGeocode({
-                query: queryData,
-                limit: 1
+    //Route to convert coordinates to an address
+    router.post('/getAddress', function(req, res){
+        if(req.body.longitude && req.body.latitude){
+            geocodingClient.reverseGeocode({
+                query: [req.body.longitude, req.body.latitude], limit: 1
             }).send().then(function(response){
-                req.coordinate = response.body.features[0].center;
-                console.log(req.coordinate);
-                next();
+                var responseBody = JSON.parse(response.rawBody);
+                req.body.address = responseBody.features[0].place_name;
+                res.json({
+                    success: true,
+                    address: req.body.address
+                });
+            });
+        } else{
+            res.json({
+                success: false,
+                message: "No coordinate where provided"
             });
         }
-        else{
+    });
+
+    //Router to convert address to coordinate
+    router.use('/addLocation', function(req, res, next){
+        if(req.body.address){
+            geocodingClient.forwardGeocode({
+                query: req.body.address, limit: 1
+            }).send().then(function(response){
+                req.body.coordinate = {};
+                req.body.coordinate.longitude = response.body.features[0].center[0];
+                req.body.coordinate.latitude = response.body.features[0].center[1];
+                next();
+            });
+        } else{
+            req.error = "No location was provided";
             next();
         }
     });
@@ -34,19 +52,17 @@ module.exports = function(router){
     router.post('/addLocation', function(req, res){
         var newLocation = new Location;
 
-        if(req.coordinate == null){
+        if(req.error){
             res.json({
                 success: false,
-                message: 'Ensure address is specified'
+                message: 'No location has been provided'
             });
-        }
-        else{
-            newLocation.address = req.body.address;
-            newLocation.longitude = req.coordinate[0];
-            newLocation.latitude = req.coordinate[1];
-            newLocation.frequency = 1;
+        } else{
+            newLocation.longitude = req.body.coordinate.longitude;
+            newLocation.latitude = req.body.coordinate.latitude;
+            newLocation.frequency = 10;
 
-            Location.findOne({address: req.body.address}, function(err, location){
+            Location.findOne({longitude: newLocation.longitude, latitude: newLocation.latitude}, function(err, location){
                 if(err) throw err;
 
                 if(location){
@@ -66,7 +82,11 @@ module.exports = function(router){
                     else{
                         res.json({
                             success: true,
-                            message: 'Successfully saved location in database'
+                            message: 'Successfully saved location in database',
+                            coordinate: {
+                                longitude: newLocation.longitude,
+                                latitude: newLocation.latitude
+                            }
                         });
                     }
                 });

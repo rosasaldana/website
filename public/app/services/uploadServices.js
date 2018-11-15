@@ -11,7 +11,11 @@ angular.module('uploadServices', [])
         //Messages.sendMessage() => function call
         imageFactory.getPhotos = function(user) {
             return $http.get('/profile-api/getImages/' + user);
-        };
+        }
+
+        imageFactory.getComments = function(id){
+            return $http.get('/profile-api/getComments/' + id);
+        }
 
         imageFactory.deletePost = function(id) {
             return $http.delete('/profile-api/image/' + id);
@@ -26,7 +30,7 @@ angular.module('uploadServices', [])
         }
 
         imageFactory.deleteComment = function(postId, commentId) {
-            return $http.delete('/profile-api/comments/' + postId + "/" + commentId); 
+            return $http.delete('/profile-api/comments/' + postId + "/" + commentId);
         }
         return imageFactory;
     });

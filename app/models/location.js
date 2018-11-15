@@ -6,10 +6,6 @@ var mongoose = require('mongoose');
     Schema = mongoose.Schema;
 
 var LocationSchema = new Schema ({
-    address: {
-        type: String,
-        required: true
-    },
     longitude: {
         type: Number,
         required: true

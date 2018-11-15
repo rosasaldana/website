@@ -16,8 +16,8 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 var map = new mapboxgl.Map({
                     container: 'map', // container id
                     style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location
-                    center: [20.000, 0],
-                    zoom: 2 //Zoom all the way out would show the entire map
+                    center: [-50.000, 20],
+                    zoom: 1 //Zoom all the way out would show the entire map
                 });
 
                 //Adding the GeoCoder Api to search within a map
@@ -156,6 +156,10 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                         }
                     });
                 });
+
+                map.on('click', function(click){
+                    scope.onMapClick(click.lngLat.lng, click.lngLat.lat, map.getZoom());
+                });
             }
         };
     })
@@ -164,15 +168,16 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
     //profileCtrl called in profile.html
     .controller('profileCtrl', function($scope, $window, Locations, User, ImagePosts) {
         var profile = this;
-        profile.username = $scope.username;
         profile.userposts = [];
         profile.friends = {
             username: [],
             displayName: []
         };
+        profile.imgLocation = {};
+        profile.uploadImagePreview = document.getElementById("PreviewUploadImage");
         var userComment = $scope.userComment;
-        $scope.$on('$viewContentLoaded', function() {
 
+        $scope.$on('$viewContentLoaded', function() {
             User.getUser().then(function(response) {
                 profile.username = response.data.username;
 
@@ -187,6 +192,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                             if(res.data.success){
                                 profile.friends.displayName.push(res.data.displayName);
                                 profile.friends.username.push(res.data.username);
+                                profile.getImagePosts(res.data.username);
                             } else{
                                 var removeFriend = {
                                     username: profile.username,
@@ -204,9 +210,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 });
 
                 //Retrieve current user image posts
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
-                });
+                profile.getImagePosts(profile.username);
             });
 
             //Retreiving the photo locations from the server
@@ -215,6 +219,15 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 $scope.geojson = data.data;
             });
         });
+
+        //Retrieving posts from a given user
+        profile.getImagePosts = function(username){
+            ImagePosts.getPhotos(username).then(function(response){
+                for(index in response.data){
+                    profile.userposts.push(response.data[index]);
+                }
+            });
+        }
 
         //Adding a friend for current user
         profile.followUser = function(user) {
@@ -228,6 +241,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 if (response.data.success == true) {
                     profile.friends.displayName.push(user);
                     profile.friends.username.push(username);
+                    profile.getImagePosts(username);
                 } else {
                     profile.errorMsg = response.data.message;
                 }
@@ -247,6 +261,12 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     var index = profile.friends.displayName.indexOf(user);
                     profile.friends.displayName.splice(index, 1);
                     profile.friends.username.splice(index, 1);
+
+                    for(i = 0; i < profile.userposts.length; i++){
+                        if(profile.userposts[i].username == username){
+                            profile.userposts.splice(i, 1);
+                        }
+                    }
                 }
             });
         };
@@ -260,15 +280,67 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             }
         }
 
-        profile.deleteImagePost = function(postId) {
-            ImagePosts.deletePost(postId).then(function() {            
-                $window.location.href = '/profile';
-            }); 
-
+        //Function to submit form for uploading a photo
+        profile.uploadPhoto = function(imgPost){
+            var uploadForm = document.getElementById("uploadPhoto-form")
+            var errorMsg = false;
+            if(imgPost == false){
+                uploadForm.reset();
+                profile.uploadImagePreview.src = "";
+                profile.uploadImagePreview.alt = "";
+                profile.imgLocation = {};
+            } else {
+                if(profile.uploadImagePreview.src == "" || profile.uploadImagePreview.alt == ""){
+                    alert("No image was selected!");
+                } else if(!profile.imgLocation){
+                    alert("Photo Location field is required!");
+                } else{
+                    Locations.addLocation(profile.imgLocation).then(function(res){
+                        if(res.data.success){
+                            profile.imgLocation.longitude = res.data.coordinate.longitude;
+                            profile.imgLocation.latitude = res.data.coordinate.latitude;
+                            setTimeout(function(){
+                                uploadForm.submit();
+                            }, 10);
+                        }
+                        else{
+                            alert("Not a valid location!");
+                        }
+                    });
+                }
+            }
         }
 
-        profile.updateLikes = function(postId, username) {
+        //Function to display picture prior to upload
+        $scope.displayPic = function(){
+            profile.uploadImagePreview.src = $scope.previewImage;
+            profile.uploadImagePreview.alt = "preview";
+        }
 
+        //Function to get image posts from a given user
+        profile.displayUserPosts = function(name){
+            profile.postsModalTitle = name;
+            var userPosts = [];
+            for(index = 0; index < profile.userposts.length; index++){
+                if(profile.userposts[index].username == name){
+                    userPosts.push(profile.userposts[index]);
+                }
+            }
+
+            profile.userModal = true;
+            profile.modalPosts = userPosts;
+            document.getElementById("displayPostsModal").click();
+        }
+
+        //Function to delete post
+        profile.deleteImagePost = function(postId) {
+            ImagePosts.deletePost(postId).then(function() {
+                $window.location.href = '/profile';
+            });
+        }
+
+        //Function to update the like count
+        profile.updateLikes = function(postId, username) {
             ImagePosts.updateLikes(postId, profile.username).then(function(response) {
                for(post in profile.userposts) {
                     if(profile.userposts[post]._id == postId) {
@@ -279,21 +351,80 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
             });
         }
 
-        $scope.postComment = function(postId, username, message) {
-            ImagePosts.postComment(postId, profile.username, message).then(function(response) {
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
+        //Function for adding a comment to the posts
+        profile.postComment = function(postId, username, message) {
+            if(message){
+                ImagePosts.postComment(postId, profile.username, message).then(function(response) {
+                    ImagePosts.getComments(postId).then(function(response) {
+                        for(index = 0; index < profile.userposts.length; index++){
+                            if(response.data._id == profile.userposts[index]._id){
+                                profile.userposts[index].comments = response.data.comments;
+                            }
+                        }
+                    });
+                    profile.userComment = "";
+                    profile.modalUserComment = "";
                 });
-                $scope.profileCtrl.userComment ="";
-                return false;
+            }
+        }
+
+        //Function for deleting a comment from the given post
+        profile.deleteComment = function(postId, commentId) {
+            ImagePosts.deleteComment(postId, commentId).then(function(response) {
+                ImagePosts.getComments(postId).then(function(response) {
+                    for(index = 0; index < profile.userposts.length; index++){
+                        if(response.data._id == profile.userposts[index]._id){
+                            profile.userposts[index].comments = response.data.comments;
+                        }
+                    }
+                });
             });
         }
 
-        profile.deleteComment = function(postId, commentId) {
-            ImagePosts.deleteComment(postId, commentId).then(function(response) {
-                ImagePosts.getPhotos(profile.username).then(function(response) {
-                    profile.userposts = response.data;
+        //Function to get user location
+        profile.getUserLocation = function(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(function(position){
+                    var userCoordinate = {
+                        longitude: position.coords.longitude,
+                        latitude: position.coords.latitude
+                    };
+                    Locations.convertToAddress(userCoordinate).then(function(res){
+                        document.getElementById("postLocation").value = res.data.address;
+                        profile.imgLocation.address = res.data.address;
+                    });
                 });
-            }); 
+            }
+        }
+
+        //Function to load pictures on map click
+        $scope.onMapClick = function(longitude, latitude, mapZoom){
+            var locationPosts = [];
+            var latBuffer = 0, longBuffer = 0;
+
+            if(mapZoom <= 2){
+                longBuffer = 2;
+                latBuffer = 4;
+            } else if(mapZoom > 2 && mapZoom <= 4){
+                longBuffer = latBuffer = 1;
+            } else if(mapZoom > 4 && mapZoom <= 6){
+                longBuffer = latBuffer = 0.5;
+            } else {
+                longBuffer = latBuffer = 0.1;
+            }
+
+            for(index = 0; index < profile.userposts.length; index++){
+                var post = profile.userposts[index];
+                if(longitude <= post.imgLongitude + longBuffer && longitude >= post.imgLongitude - longBuffer){
+                    if(latitude <= post.imgLatitude + latBuffer && latitude >= post.imgLatitude - latBuffer){
+                        locationPosts.push(profile.userposts[index]);
+                    }
+                }
+            }
+
+            $scope.$apply(function(){
+                profile.modalPosts = locationPosts;
+                document.getElementById("displayPostsModal").click();
+            }, 10);
         }
     });

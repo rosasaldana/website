@@ -66,11 +66,10 @@ module.exports = function(router) {
                     imageposts.forEach(post => {
                         if(post.imgRef.toString() == files[file]._id) {
                             post.filename = files[file].filename;
-                            console.log(post);
                         }
                     });
 				}
-               
+
 				res.send(imageposts);
 			})
 		});
@@ -83,9 +82,14 @@ module.exports = function(router) {
 				console.log(err);
 			}
 			if(file != null) {
-			const readstream = gfs.createReadStream((file.filename));
-			readstream.pipe(res);
-			}
+                const readstream = gfs.createReadStream((file.filename));
+	            readstream.pipe(res);
+			} else {
+                res.json({
+                    success: false,
+                    message: "File not found"
+                });
+            }
 		});
 	});
 
@@ -109,6 +113,7 @@ module.exports = function(router) {
 
     //Route to upload image for a given user
 	router.post('/userimages', upload.single('userImg'), function(req, res) {
+        console.log(req.body);
          var imagePost = new ImagePost();
 		 imagePost.imgTitle = req.body.imgTitle;
 		 imagePost.imgDescription = req.body.imgDescription;
@@ -116,6 +121,10 @@ module.exports = function(router) {
 		 imagePost.username = req.body.username;
          imagePost.likeCount = 0;
          imagePost.heartstatus = "-o";
+         imagePost.imgLongitude = req.body.longitude;
+         imagePost.imgLatitude = req.body.latitude;
+         console.log(imagePost);
+         console.log(req.body);
 
 		imagePost.save(function(err) {
 			if(err) {
@@ -188,11 +197,11 @@ module.exports = function(router) {
             }
             var usersLiked = post.likes;
             if(usersLiked.includes(req.params.username)) {
-                ImagePost.findOneAndUpdate({_id : req.params.id}, 
+                ImagePost.findOneAndUpdate({_id : req.params.id},
                     {
                         "$inc" : {"likeCount": -1},
                         "$pull" : {"likes" : req.params.username},
-                        "heartstatus" : "-o" 
+                        "heartstatus" : "-o"
                     }, {new:true}, function(err, raw) {
                         if(err) {
                             throw err;
@@ -203,21 +212,21 @@ module.exports = function(router) {
                             "heartstatus" : "-o"
                         });
                     });
-            } 
+            }
             else {
-                ImagePost.findOneAndUpdate({_id : req.params.id}, 
+                ImagePost.findOneAndUpdate({_id : req.params.id},
                     {
                         "$inc" : {"likeCount": 1},
                         "$push" : {"likes" : req.params.username},
-                        "heartstatus" : ""  
+                        "heartstatus" : ""
                     }, {new:true}, function(err, raw) {
                         if(err) {
                             throw err;
                         }
-                        res.json({ 
+                        res.json({
                             message: "success",
                             updatedLikes: raw.likeCount,
-                            "heartstatus" : ""  
+                            "heartstatus" : ""
                         });
                     });
             }
@@ -226,13 +235,13 @@ module.exports = function(router) {
 
     //Router to post a comment
     router.post('/comments/:user/:id/:message', function(req,res) {
-        ImagePost.findOneAndUpdate({_id: req.params.id}, 
+        ImagePost.findOneAndUpdate({_id: req.params.id},
             {
                 "$push" : {"comments" : {"user" : req.params.user, "message": req.params.message}}
             }, {new: true}, function(err, post) {
                 if(err) {
                     throw err;
-                } 
+                }
                 res.json(post);
             });
     });
@@ -247,6 +256,21 @@ module.exports = function(router) {
                 }
                 res.json(post);
             });
+    });
+
+    router.get('/getComments/:postId', function(req, res){
+        ImagePost.findOne({_id: req.params.postId}, function(err, imagePost){
+            if(err) throw err;
+
+            if(imagePost){
+                res.send(imagePost)
+            } else{
+                res.json({
+                    success: false,
+                    message: "Could not get post"
+                });
+            }
+        });
     });
 
 	return router;
