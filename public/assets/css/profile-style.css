@@ -38,6 +38,7 @@
 }
 
 .profile-posts {
+    margin-top: -20px;
     max-height: 65vh;
     overflow-y: scroll;
 }

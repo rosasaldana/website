@@ -54,6 +54,18 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controller: 'resendController',
                 controllerAs: 'resendCtrl'
             })
+            .when('/facebook/:token',{
+                templateUrl: 'app/views/pages/users/social/social.html',
+                controller: 'facebookCtrl',
+                controllerAs: 'facebook'
+            })
+
+            .when('/facebookerror',{
+                templateUrl: 'app/views/pages/users/login.html',
+                controller: 'facebookCtrl',
+                controllerAs: 'facebook'
+            })
+
             .otherwise({
                 redirectTo: '/'
             });

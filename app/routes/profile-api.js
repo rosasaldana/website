@@ -243,9 +243,9 @@ module.exports = function(router) {
     });
 
     router.delete('/comments/:postId/:commentId', function(req, res) {
-        ImagePost.findOneAndUpdate({_id : new ObjectId(req.params.postId), "comments._id" : new ObjectId(req.params.commentId)},
+        ImagePost.findOneAndUpdate({"comments._id" : new ObjectId(req.params.commentId)},
             {
-                "$pull" : {"comments" : {"$elemMatch" : {"_id" : new ObjectId(req.params.commentId)} } }
+                "$pull" : {"comments" : {"_id" : new ObjectId(req.params.commentId)} }
             }, function(err, post) {
                 if(err) {
                     throw err;

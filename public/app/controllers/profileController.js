@@ -340,11 +340,9 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         //Function for adding a comment to the posts
         $scope.postComment = function(postId, username, message) {
             ImagePosts.postComment(postId, profile.username, message).then(function(response) {
-                for(post in profile.userposts) {
-                    if(profile.userposts[post]._id == postId) {
-                     profile.userposts[post].comments = response.data.comments;
-                    }
-                }
+                ImagePosts.getPhotos(profile.username).then(function(response) {
+                    profile.userposts = response.data;
+                });
                 $scope.profileCtrl.userComment ="";
                 return false;
             });
@@ -353,16 +351,9 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
         //Function for deleting a comment from the given post
         profile.deleteComment = function(postId, commentId) {
             ImagePosts.deleteComment(postId, commentId).then(function(response) {
-                // for(post in profile.userposts){
-                //     if(profile.userposts[post]._id == postId) {
-                //         for(comment in profile.userposts[post].comments) {
-                //             if(profile.userposts[post].comments[comment]._id == commentId) {
-                //                 var index = profile.userposts[post].comments.indexOf(comment);
-                //                 profile.userposts[post].comments.splice(index, 1);
-                //             }
-                //         }
-                //     }
-                // }console.log(response.data.comments);
+                ImagePosts.getPhotos(profile.username).then(function(response) {
+                    profile.userposts = response.data;
+                });
             });
         }
 

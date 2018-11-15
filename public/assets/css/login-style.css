@@ -1,0 +1,70 @@
+.blurred-bg-container .content h1 {
+  margin: 0;
+  color: white;
+  font-size: 30px;
+  line-height: 40px;
+  font-family: 'Playfair Display', serif;
+}
+
+.blurred-bg-container {
+  background: url("/assets/images/lagoon.jpg");
+  height: 100vh; /* =h */
+  margin-top: -38px;
+	width: 100%;
+	min-height: 87vh;
+	padding-top: 40px;
+  background-size: cover;
+}
+
+.blurred-bg-container .content {
+  background: inherit;
+  width: 40%; /* =cw */
+  height: 40%; /* =ch */
+  border-radius: 8px;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%; /* =ct */
+  left: 30%; /* =cl */
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.blurred-bg-container .text {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  height: 100%;
+  box-sizing: border-box; /* so that padding is included in height */
+}
+
+.blurred-bg-container .blur {
+  background: inherit;
+  height: 100vh; /* h */
+  width: 166.667%; /* (100/cw) x 100% */
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(
+    -10%,
+    -30%
+  ); /* - [cl - (cw/2)] % ,  -[ct - (ch/2)] % */
+  filter: blur(20px);
+  z-index: -1;
+}
+.error{
+  position: relative;
+  animation: shake 0.2s;
+}
+@keyframes shake{
+  0%, 100%{
+    left: 0px;
+  }
+  20%, 80%{
+    left: -15px;
+  }
+  40%, 60%{
+    left: 15px;
+  }
+}
+
+
