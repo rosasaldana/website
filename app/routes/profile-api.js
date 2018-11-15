@@ -120,6 +120,7 @@ module.exports = function(router) {
 		 imagePost.username = req.body.username;
          imagePost.likeCount = 0;
          imagePost.heartstatus = "-o";
+         imagePost.imgLocation = req.body.imgLocation;
 
 		imagePost.save(function(err) {
 			if(err) {

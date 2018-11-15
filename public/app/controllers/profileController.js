@@ -156,6 +156,10 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                         }
                     });
                 });
+
+                map.on('click', function(click){
+                    scope.onMapClick(click.lngLat.lng, click.lngLat.lat, map.getZoom());
+                });
             }
         };
     })
@@ -287,6 +291,9 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                         if(res.data.success){
                             uploadForm.submit();
                         }
+                        else{
+                            alert("Not a valid location!");
+                        }
                     });
                 }
             }
@@ -373,5 +380,30 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                     });
                 });
             }
+        }
+
+        //Function to load pictures on map click
+        $scope.onMapClick = function(longitude, latitude, mapZoom){
+            console.log(mapZoom);
+            var locationPosts = [];
+            var coordinate = {
+                longitude: longitude,
+                latitude: latitude
+            };
+            // Locations.convertToAddress(coordinate).then(function(res){
+            //     var mapClickAddress = res.data.address;
+            //     var mapSplit = mapClickAddress.split(",");
+            //     console.log(mapClickAddress);
+            //     // for(index = 0; index < profile.userposts.length; index++){
+            //     //     var postSplit = profile.userPosts[index].imgLocation;
+            //     //     if(mapZoom < 1){ do country
+            //     //         if(postSplit[postSplit.length-1] == mapSplit[mapSplit.length-1]){
+            //     //             locationPosts.push(profile.userPosts[index]);
+            //     //         }
+            //     //     } else if(mapZoom > 2 && zoom < 5){
+            //     //
+            //     //     }
+            //     // }
+            // });
         }
     });
