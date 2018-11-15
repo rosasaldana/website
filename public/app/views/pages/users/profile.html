@@ -39,7 +39,7 @@
 
         <!-- Posts -->
         <div class="col-md-4 top-margin profile-posts">
-            <div class="row" ng-repeat="post in profileCtrl.userposts">
+            <div class="row" ng-repeat="post in profileCtrl.userposts | orderBy: 'date':true ">
                 <div class="col-sm-12">
                     <div class="card mb-3">
                         <div class="card-body" style="padding: 10px">

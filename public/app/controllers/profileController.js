@@ -225,6 +225,7 @@ angular.module('profileController', ['locationServices', 'userServices', 'upload
                 for(index in response.data){
                     profile.userposts.push(response.data[index]);
                 }
+                console.log(profile.userposts);
             });
         }
 
